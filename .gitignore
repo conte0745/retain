@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# next
+.next
+
+# Editor directories and files
+.vscode/*
+
+# Prisma
+prisma/migrations
+
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment file
+.env
+.env.local
+
+# slack
+src/features/App/components/Slack.tsx
