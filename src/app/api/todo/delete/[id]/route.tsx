@@ -6,7 +6,12 @@ import { options } from "@/app/api/utils";
 const prisma = new PrismaClient();
 
 export async function OPTIONS() {
-	return NextResponse.json({}, { headers: options });
+	try {
+		return NextResponse.json({}, { headers: options });
+	} catch (e) {
+		console.log(e);
+		return NextResponse.json({ message: e }, { status: 500 });
+	}
 }
 
 export async function POST(_: NextRequest, { params }: { params: Params }) {
