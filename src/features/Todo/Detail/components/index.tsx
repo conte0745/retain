@@ -70,7 +70,7 @@ export const ModalArea: FC<{
 					});
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.error(e));
 	}
 
 	async function onDeleteSubmit(values: Todo) {
@@ -93,7 +93,7 @@ export const ModalArea: FC<{
 					});
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.error(e));
 	}
 
 	useEffect(() => {

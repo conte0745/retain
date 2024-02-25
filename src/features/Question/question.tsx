@@ -1,13 +1,13 @@
-import { InputArea } from "@TodoCreate/components";
-import { Show } from "@TodoShow/components";
-import { ModalArea } from "@TodoDetail/components";
+import { InputArea } from "@QuestionCreate/components";
+import { Show } from "@QuestionShow/components";
+import { ModalArea } from "@QuestionDetail/components";
 import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
-import { Todo } from "@prisma/client";
+import { Question } from "@prisma/client";
 
-export const Todos = () => {
+export const Questions = () => {
 	const [submitFlg, setSubmitFlg] = useState<boolean>(true);
-	const [detailTodo, setDetailTodo] = useState<Todo | undefined>();
+	const [detailQuestion, setDetailQuestion] = useState<Question | undefined>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -17,7 +17,7 @@ export const Todos = () => {
 			<Show
 				submitFlg={submitFlg}
 				onOpen={onOpen}
-				setDetailTodo={setDetailTodo}
+				setDetailQuestion={setDetailQuestion}
 			></Show>
 
 			<ModalArea
@@ -25,7 +25,7 @@ export const Todos = () => {
 				onClose={onClose}
 				submitFlg={submitFlg}
 				setSubmitFlg={setSubmitFlg}
-				detailTodo={detailTodo}
+				detailQuestion={detailQuestion}
 			></ModalArea>
 		</>
 	);

@@ -9,11 +9,16 @@
 		"paths": {
 			"@/*": ["src/*"],
 			"@App/*": ["src/features/App/*"],
+			"@Auth/*": ["src/features/Authentication/*"],
 			"@Top/*": ["src/features/Top/*"],
 			"@Todo/*": ["src/features/Todo/*"],
-			"@Show/*": ["src/features/Todo/Show/*"],
-			"@InputArea/*": ["src/features/Todo/InputArea/*"],
-			"@Detail/*": ["src/features/Todo/Detail/*"],
+			"@TodoShow/*": ["src/features/Todo/Show/*"],
+			"@TodoCreate/*": ["src/features/Todo/InputArea/*"],
+			"@TodoDetail/*": ["src/features/Todo/Detail/*"],
+			"@Question/*": ["src/features/Question/*"],
+			"@QuestionShow/*": ["src/features/Question/Show/*"],
+			"@QuestionCreate/*": ["src/features/Question/InputArea/*"],
+			"@QuestionDetail/*": ["src/features/Question/Detail/*"],
 			"@Header/*": ["src/features/Header/*"]
 		},
 		/* Bundler mode */

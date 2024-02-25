@@ -38,7 +38,6 @@ export const Show: FC<{
 	const onClickEditBtn = function (todo: Todo) {
 		onOpen();
 		setDetailTodo(todo);
-		console.log(todo);
 	};
 
 	let idx = 1;

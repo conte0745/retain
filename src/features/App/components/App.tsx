@@ -1,25 +1,29 @@
-import { Routes, Route, Link } from "react-router-dom";
-import { Home, Top } from "@Top/components/index";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Header } from "@Header/components/index";
-import { Container, Heading } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import { Todos } from "@/features/Todo/todo";
+import { SignUp } from "@/features/Authentication/components/signup";
+import { SignIn } from "@/features/Authentication/components/signin";
+import { Top } from "@/features/Top/components";
+import { SignOut } from "@/features/Authentication/components/signout";
+import { Questions } from "@/features/Question/question";
 
 function App() {
 	return (
 		<>
-			<Header></Header>
-			<Container>
-				<Heading>Todo Page</Heading>
-				<Todos></Todos>
-				<Link to="/top">Top</Link>
-				<br />
-				<Link to="/home">Home</Link>
-				<br />
-				<Routes>
-					<Route path="/top" element={<Top />} />
-					<Route path="/home" element={<Home />} />
-				</Routes>
-			</Container>
+			<BrowserRouter>
+				<Header></Header>
+				<Container>
+					<Routes>
+						<Route index element={<Top />} />
+						<Route path="/todo/*" element={<Todos />} />
+						<Route path="/question/*" element={<Questions />} />
+						<Route path="/signup" element={<SignUp />} />
+						<Route path="/signin" element={<SignIn />} />
+						<Route path="/signout" element={<SignOut />} />
+					</Routes>
+				</Container>
+			</BrowserRouter>
 		</>
 	);
 }

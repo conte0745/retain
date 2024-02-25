@@ -18,3 +18,28 @@ model Todo {
   updated_at DateTime?
   deleted_at DateTime?
 }
+model Question {
+  question_id Int @id @default(autoincrement())
+  question_title String
+  question_content String @default("作成中...")
+  question_explanation String @default("作成中...")
+  question_correct_rate Int?
+  question_count_incorrect_question Int @default(0)
+  question_public_flag Boolean @default(false)
+  question_created_at DateTime @default(now())
+  question_updated_at DateTime?
+  question_deleted_at DateTime?
+}
+
+model Answer {
+  answer_id Int @id @default(autoincrement())
+  question_id Int
+  answer_content String
+  answer_is_correct_content Boolean @default(false)
+  answer_public_flag Boolean @default(false)
+  answer_created_at DateTime @default(now())
+  answer_updated_at DateTime?
+  answer_deleted_flag Boolean @default(false)
+  answer_deleted_at DateTime?
+  @@index([question_id])
+}

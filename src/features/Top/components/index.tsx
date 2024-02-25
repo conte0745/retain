@@ -1,7 +1,12 @@
-export const Top = () => {
-	return <h2>Top</h2>;
-};
+import { Link } from "react-router-dom";
 
-export const Home = () => {
-	return <h2>Home</h2>;
+export const Top = () => {
+	return (
+		<>
+			<h1>Top</h1>
+			<Link to="./todo">TODO ページへ</Link>
+			<br />
+			<Link to="./question">Question ページへ</Link>
+		</>
+	);
 };

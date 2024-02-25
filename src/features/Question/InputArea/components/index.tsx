@@ -9,7 +9,7 @@ import {
 	HStack,
 	useToast,
 } from "@chakra-ui/react";
-import { Todo } from "@prisma/client";
+import { Question } from "@prisma/client";
 
 export const InputArea: FC<{
 	submitFlg: boolean;
@@ -21,22 +21,20 @@ export const InputArea: FC<{
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Question>();
 	const toast = useToast();
 
-	async function onSubmit(values: Todo) {
-		if (values.content === "") {
+	async function onSubmit(values: Question) {
+		if (values.question_title === "") {
 			return;
 		}
-		await fetch(`${url}/todo`, {
+		await fetch(`${url}/question`, {
 			method: "post",
-			headers: {
-				// "Content-Type": "application/json",
-			},
+			headers: {},
 			body: JSON.stringify(values),
 		})
 			.then(() => {
-				setValue("content", "");
+				setValue("question_title", "");
 				setSubmitFlg(!submitFlg);
 				toast({
 					title: "Success",
@@ -50,12 +48,13 @@ export const InputArea: FC<{
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<FormControl isInvalid={errors.content && true}>
-				<FormLabel htmlFor="content"></FormLabel>
+			<FormControl isInvalid={errors.question_title && true}>
+				<FormLabel htmlFor="question_title"></FormLabel>
 				<HStack>
 					<Input
-						id="content"
-						{...register("content", {
+						id="question_title"
+						placeholder="問題のタイトルを入力してください"
+						{...register("question_title", {
 							required: "必須項目です。",
 							maxLength: { value: 190, message: "190文字までの入力です。" },
 						})}
@@ -70,7 +69,7 @@ export const InputArea: FC<{
 					</Button>
 				</HStack>
 				<FormErrorMessage>
-					{errors.content && errors.content.message}
+					{errors.question_title && errors.question_title.message}
 				</FormErrorMessage>
 			</FormControl>
 		</form>
