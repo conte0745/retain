@@ -3,6 +3,7 @@ import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Question } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Loading } from "@Question/components/loading";
+import { fetchQuestions } from "@Question/Show/hooks/fetchQuestions";
 
 export const Show: FC<{
 	submitFlg: boolean;
@@ -13,30 +14,12 @@ export const Show: FC<{
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		const url = import.meta.env.VITE_PUBLIC_API_URL;
 		setOnLoading(true);
-		const getQuestions = async () => {
-			const response: Question[] = await fetch(`${url}/question`)
-				.then((response) => {
-					return response.json();
-				})
-				.catch((e) => {
-					console.error(e);
-				})
-				.finally(() => {
-					setOnLoading(false);
-				});
+		(async () => {
+			setQuestions(await fetchQuestions());
+		})();
+		setOnLoading(false);
 
-			response.forEach((e) => {
-				e.question_created_at = new Date(e.question_created_at);
-				e.question_updated_at = e.question_updated_at
-					? new Date(e.question_updated_at)
-					: null;
-			});
-
-			setQuestions(response);
-		};
-		getQuestions();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [submitFlg]);
 

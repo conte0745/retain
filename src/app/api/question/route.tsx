@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Question } from "@prisma/client";
-import { options } from "@/app/api/utils";
-
-const prisma = new PrismaClient();
+import { Question } from "@prisma/client";
+import { options, prisma } from "@/app/api/utils";
 
 export async function OPTIONS() {
 	try {

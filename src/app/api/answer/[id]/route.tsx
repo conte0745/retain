@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Params } from "react-router-dom";
-import { PrismaClient } from "@prisma/client";
-import { options } from "@/app/api/utils";
-
-const prisma = new PrismaClient();
+import { options, prisma } from "@/app/api/utils";
 
 export async function OPTIONS() {
 	try {

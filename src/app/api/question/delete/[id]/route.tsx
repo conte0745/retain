@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { Params } from "react-router-dom";
-import { options } from "@/app/api/utils";
-
-const prisma = new PrismaClient();
+import { options, prisma } from "@/app/api/utils";
 
 export async function OPTIONS() {
 	try {
@@ -24,6 +21,15 @@ export async function POST(_: NextRequest, { params }: { params: Params }) {
 			},
 			data: {
 				question_deleted_at: getNow(),
+			},
+		});
+		await prisma.answer.updateMany({
+			where: {
+				question_id: targetId,
+			},
+			data: {
+				answer_deleted_flag: true,
+				answer_deleted_at: getNow(),
 			},
 		});
 		return NextResponse.json({}, { status: 200, headers: options });
