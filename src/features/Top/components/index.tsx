@@ -7,6 +7,8 @@ export const Top = () => {
 			<Link to="./todo">TODO ページへ</Link>
 			<br />
 			<Link to="./question">Question ページへ</Link>
+			<br />
+			<Link to="./drill">Drill ページへ</Link>
 		</>
 	);
 };

@@ -9,7 +9,7 @@ export const initAnswers: Answer = {
 	question_id: -1,
 	answer_content: "",
 	answer_is_correct_content: false,
-	answer_public_flag: false,
+	answer_public_flag: true,
 	answer_created_at: new Date(),
 	answer_updated_at: null,
 	answer_deleted_at: null,

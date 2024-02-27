@@ -19,6 +19,9 @@
 			"@QuestionShow/*": ["src/features/Question/Show/*"],
 			"@QuestionCreate/*": ["src/features/Question/InputArea/*"],
 			"@QuestionDetail/*": ["src/features/Question/Detail/*"],
+			"@Drill/*": ["src/features/Drill/*"],
+			"@DrillShow/*": ["src/features/Drill/Show/*"],
+			"@DrillDetail/*": ["src/features/Drill/Detail/*"],
 			"@Header/*": ["src/features/Header/*"]
 		},
 		/* Bundler mode */
@@ -28,6 +31,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "preserve",
+		"downlevelIteration": true,
 		/* Linting */
 		"strict": true,
 		"noUnusedLocals": true,

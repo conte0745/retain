@@ -43,3 +43,9 @@ model Answer {
   answer_deleted_at DateTime?
   @@index([question_id])
 }
+model AnswerResult {
+  answer_result_id Int @id @default(autoincrement())
+  answer_result_question_id Int
+  answer_result_user_uuid Int?
+  answer_result_is_correct Boolean?
+}

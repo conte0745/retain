@@ -13,7 +13,7 @@ export const fetchQuestions = async () => {
 		.finally(() => {
 			//
 		});
-
+	console.log(response);
 	response.forEach((e) => {
 		e.question_created_at = new Date(e.question_created_at);
 		e.question_updated_at = e.question_updated_at

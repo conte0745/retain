@@ -7,6 +7,8 @@ import { SignIn } from "@/features/Authentication/components/signin";
 import { Top } from "@/features/Top/components";
 import { SignOut } from "@/features/Authentication/components/signout";
 import { Questions } from "@/features/Question/question";
+import { Drill } from "@/features/Drill/drill";
+import { DetailDrill } from "@/features/Drill/Detail/components";
 
 function App() {
 	return (
@@ -18,6 +20,8 @@ function App() {
 						<Route index element={<Top />} />
 						<Route path="/todo/*" element={<Todos />} />
 						<Route path="/question/*" element={<Questions />} />
+						<Route path="/drill" element={<Drill />} />
+						<Route path="/drill/Detail" element={<DetailDrill />} />
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/signin" element={<SignIn />} />
 						<Route path="/signout" element={<SignOut />} />

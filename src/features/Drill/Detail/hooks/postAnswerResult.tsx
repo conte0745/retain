@@ -1,10 +1,9 @@
-import { QuestionAnswer } from "@/types/QuestionAnswer";
+import { AnswerResult } from "@prisma/client";
 
-export const postQuestion = async (values: QuestionAnswer) => {
+export const postAnswerResult = async (values: AnswerResult) => {
 	const url = import.meta.env.VITE_PUBLIC_API_URL;
 
-	console.log(values);
-	const response = await fetch(`${url}/question/update/${values.question_id}`, {
+	const response = await fetch(`${url}/question/result`, {
 		method: "post",
 		headers: {},
 		body: JSON.stringify(values),

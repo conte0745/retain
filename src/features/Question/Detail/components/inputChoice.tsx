@@ -45,9 +45,9 @@ export const InputChoice: React.FC<props> = (props) => {
 					colorScheme="blue"
 					defaultChecked={props.answer?.answer_public_flag}
 					{...props.register(
-						`answers.${props.index}.answer_public_flag` as const
+						`answers.${props.index}.answer_public_flag` as const,
+						{ onChange: () => setIsPublic(!isPublic) }
 					)}
-					onChange={() => setIsPublic(!isPublic)}
 				>
 					{isPublic ? "公開中" : "非公開"}
 				</Checkbox>
@@ -55,9 +55,9 @@ export const InputChoice: React.FC<props> = (props) => {
 					colorScheme="green"
 					defaultChecked={props.answer?.answer_is_correct_content}
 					{...props.register(
-						`answers.${props.index}.answer_is_correct_content` as const
+						`answers.${props.index}.answer_is_correct_content` as const,
+						{ onChange: () => setIsCorrect(!isCorrect) }
 					)}
-					onChange={() => setIsCorrect(!isCorrect)}
 				>
 					{isCorrect ? "大正解" : "不正解"}
 				</Checkbox>

@@ -22,6 +22,9 @@ export default defineConfig({
 				"./src/features/Question/InputArea/"
 			),
 			"@QuestionDetail": resolve(__dirname, "./src/features/Question/Detail/"),
+			"@Drill": resolve(__dirname, "./src/features/Drill/"),
+			"@DrillShow": resolve(__dirname, "./src/features/Drill/Show/"),
+			"@DrillDetail": resolve(__dirname, "./src/features/Drill/Detail/"),
 			"@Header": resolve(__dirname, "./src/features/Header"),
 			"~": resolve(__dirname, "./public/"),
 		},
