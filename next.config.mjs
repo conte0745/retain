@@ -1,4 +1,5 @@
-// next.config.js
-export const experimental = {
-	modern: true,
+const nextConfig = {
+	//...内容は略
 };
+
+export default nextConfig;
