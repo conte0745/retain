@@ -13,8 +13,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const RootLayout = ({ children }: { children: React.ReactNode }) => (
+const RootLayout = () => (
 	<html lang="ja">
 		<head>
 			<meta charSet="UTF-8" />
