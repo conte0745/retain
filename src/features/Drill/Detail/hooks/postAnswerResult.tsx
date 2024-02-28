@@ -1,7 +1,7 @@
 import { AnswerResult } from "@prisma/client";
 
 export const postAnswerResult = async (values: AnswerResult) => {
-	const url = import.meta.env.VITE_PUBLIC_API_URL;
+	const url = process.env.NEXT_PUBLIC_API_URL;
 
 	const response = await fetch(`${url}/question/result`, {
 		method: "post",

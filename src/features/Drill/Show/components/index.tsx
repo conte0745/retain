@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Question } from "@prisma/client";

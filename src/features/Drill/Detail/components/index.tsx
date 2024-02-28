@@ -1,3 +1,4 @@
+"use client";
 import { FC, useEffect, useState } from "react";
 import { Question, AnswerResult, Answer } from "@prisma/client";
 import {

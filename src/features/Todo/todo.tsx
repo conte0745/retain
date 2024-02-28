@@ -1,3 +1,4 @@
+"use client";
 import { InputArea } from "@TodoCreate/components";
 import { Show } from "@TodoShow/components";
 import { ModalArea } from "@TodoDetail/components";

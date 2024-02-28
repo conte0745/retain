@@ -1,5 +1,5 @@
 export const deleteQuestionWithAnswer = async (question_id: number) => {
-	const url = import.meta.env.VITE_PUBLIC_API_URL;
+	const url = process.env.NEXT_PUBLIC_API_URL;
 
 	const response = await fetch(`${url}/question/delete/${question_id}`, {
 		method: "post",

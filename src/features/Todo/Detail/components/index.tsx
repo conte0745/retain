@@ -30,7 +30,7 @@ export const ModalArea: FC<{
 	const toast = useToast();
 	const options = { timeZone: "Asia/Tokyo" };
 
-	const url = import.meta.env.VITE_PUBLIC_API_URL;
+	const url = process.env.NEXT_PUBLIC_API_URL;
 	const {
 		handleSubmit,
 		register,

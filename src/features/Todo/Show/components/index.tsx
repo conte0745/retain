@@ -13,7 +13,7 @@ export const Show: FC<{
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		const url = import.meta.env.VITE_PUBLIC_API_URL;
+		const url = process.env.NEXT_PUBLIC_API_URL;
 		setOnLoading(true);
 		const getTodos = async () => {
 			const response: Todo[] = await fetch(`${url}/todo`)

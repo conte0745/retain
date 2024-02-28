@@ -1,3 +1,4 @@
+"use client";
 import { InputArea } from "@QuestionCreate/components";
 import { Show } from "@QuestionShow/components";
 import { ModalArea } from "@QuestionDetail/components";
