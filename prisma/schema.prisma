@@ -6,10 +6,27 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  // Uses connection pooling
+  url = env("POSTGRES_PRISMA_URL")
+  // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
+  // or you'll have dangling databases from migrations
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum Role  {
+  USER
+  ADMIN
+}
+model User {
+  user_id        Int      @id @default(autoincrement())
+  user_name      String
+  user_email     String   @unique
+  user_role      Role     @default(USER)
+  user_created_at DateTime @default(now())
+  user_updated_at DateTime @updatedAt
+  user_deleted_at DateTime?
+}
 
 model Todo {
   todo_id Int @id @default(autoincrement())
