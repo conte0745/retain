@@ -13,7 +13,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-export const Page = () => (
+const Page = () => (
 	<React.StrictMode>
 		<AuthProvider>
 			<ChakraProvider>
