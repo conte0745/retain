@@ -13,7 +13,8 @@ export async function GET() {
 		});
 		return NextResponse.json(todos);
 	} catch (e) {
-		return NextResponse.json({ message: "Error" }, { status: 500 });
+		console.error(e);
+		return NextResponse.json({ message: e }, { status: 500 });
 	} finally {
 		await prisma.$disconnect();
 	}
