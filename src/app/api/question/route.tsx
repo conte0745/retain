@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Question } from "@prisma/client";
-import { options, prisma } from "@/app/api/utils";
+import { options } from "@/app/api/utils";
+import prisma from "@/app/db";
 
 export async function OPTIONS() {
 	try {

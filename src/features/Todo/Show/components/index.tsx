@@ -13,10 +13,9 @@ export const Show: FC<{
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		const url = process.env.NEXT_PUBLIC_VERCEL_URL;
 		setOnLoading(true);
 		const getTodos = async () => {
-			const response: Todo[] = await fetch(`${url}/api/todo`)
+			const response: Todo[] = await fetch(`/api/todo`)
 				.then((response) => response.json())
 				.catch((e) => {
 					console.error(e);

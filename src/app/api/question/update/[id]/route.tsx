@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Params } from "react-router-dom";
-import { options, prisma } from "@/app/api/utils";
+import { options } from "@/app/api/utils";
 import { QuestionAnswer } from "@/types/QuestionAnswer";
+import prisma from "@/app/db";
 
 export async function OPTIONS() {
 	try {

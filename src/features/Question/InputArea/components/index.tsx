@@ -15,7 +15,6 @@ export const InputArea: FC<{
 	submitFlg: boolean;
 	setSubmitFlg: Dispatch<SetStateAction<boolean>>;
 }> = ({ submitFlg, setSubmitFlg }) => {
-	const url = process.env.NEXT_PUBLIC_VERCEL_URL;
 	const {
 		handleSubmit,
 		register,
@@ -28,7 +27,7 @@ export const InputArea: FC<{
 		if (values.question_title === "") {
 			return;
 		}
-		await fetch(`${url}/api/question`, {
+		await fetch(`api/question`, {
 			method: "post",
 			headers: {},
 			body: JSON.stringify(values),

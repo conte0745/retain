@@ -32,7 +32,6 @@ export const ModalArea: FC<{
 	const toast = useToast();
 	const options = { timeZone: "Asia/Tokyo" };
 
-	const url = process.env.NEXT_PUBLIC_VERCEL_URL;
 	const {
 		handleSubmit,
 		register,
@@ -52,7 +51,7 @@ export const ModalArea: FC<{
 			return;
 		}
 
-		await fetch(`${url}/api/todo/update/${values.todo_id}`, {
+		await fetch(`/api/todo/update/${values.todo_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
@@ -76,7 +75,7 @@ export const ModalArea: FC<{
 	}
 
 	async function onDeleteSubmit(values: Todo) {
-		await fetch(`${url}/todo/delete/${values.todo_id}`, {
+		await fetch(`todo/delete/${values.todo_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
