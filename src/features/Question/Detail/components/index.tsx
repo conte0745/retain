@@ -142,8 +142,9 @@ export const ModalArea: FC<{
 		setDelValue("question_id", Number(detailQuestion?.question_id) ?? "");
 
 		(async () => {
-			const response = fetchAnswers(detailQuestion!.question_id);
-			setValue("answers", await response);
+			const response = await fetchAnswers(detailQuestion!.question_id);
+			if (response != undefined || response != null)
+				setValue("answers", response);
 			setOnLoading(false);
 		})();
 

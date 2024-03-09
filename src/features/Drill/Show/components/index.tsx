@@ -14,14 +14,17 @@ export const Show: FC = () => {
 	useEffect(() => {
 		setOnLoading(true);
 		(async () => {
-			setQuestions(await fetchQuestions());
+			const response = await fetchQuestions();
+			if (response != undefined || response != null) {
+				setQuestions(response);
+			}
 			setOnLoading(false);
 		})();
 	}, []);
 
 	const onClickDetailBtn = function (question: Question) {
-		navigate("drill/detail", {
-			state: { questionId: question.question_id },
+		navigate(`detail`, {
+			state: { question: question },
 		});
 	};
 

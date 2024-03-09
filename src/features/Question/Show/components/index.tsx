@@ -17,7 +17,10 @@ export const Show: FC<{
 	useEffect(() => {
 		setOnLoading(true);
 		(async () => {
-			setQuestions(await fetchQuestions());
+			const response = await fetchQuestions();
+			if (response != undefined || response != null) {
+				setQuestions(response);
+			}
 			setOnLoading(false);
 		})();
 

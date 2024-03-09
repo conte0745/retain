@@ -13,5 +13,6 @@ export const fetchAnswers = async (question_id: number) => {
 		.finally(() => {
 			//
 		});
+	console.debug(response);
 	return response;
 };

@@ -28,7 +28,7 @@ export const DetailDrill: FC = () => {
 	const [afterSubmit, setAfterSubmit] = useState<boolean>(false);
 	const [isCorrect, setIsCorrect] = useState<boolean>(false);
 	const [answers, setAnswers] = useState<Answer[] | undefined | null>();
-	const detailQuestion: Question | undefined = location.state;
+	const detailQuestion: Question | undefined = location.state.question;
 	const isCorrectAlphabets: number[] = [];
 
 	const {
@@ -55,11 +55,13 @@ export const DetailDrill: FC = () => {
 
 		setOnLoading(true);
 		(async () => {
-			const answers = await fetchAnswers(detailQuestion!.question_id);
-			answers.forEach((e, idx) =>
-				e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
-			);
-			setAnswers(answers);
+			const response = await fetchAnswers(detailQuestion.question_id);
+			if (response != undefined || response != null) {
+				response.forEach((e, idx) =>
+					e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
+				);
+				setAnswers(response);
+			}
 			setOnLoading(false);
 		})();
 
