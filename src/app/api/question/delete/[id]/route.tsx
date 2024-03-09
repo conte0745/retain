@@ -6,7 +6,6 @@ export async function OPTIONS() {
 	try {
 		return NextResponse.json({}, { headers: options });
 	} catch (e) {
-		console.log(e);
 		return NextResponse.json({ message: e }, { status: 500 });
 	}
 }
@@ -34,7 +33,6 @@ export async function POST(_: NextRequest, { params }: { params: Params }) {
 		});
 		return NextResponse.json({}, { status: 200, headers: options });
 	} catch (e) {
-		console.log(e);
 		return NextResponse.json({ message: e }, { status: 500, headers: options });
 	} finally {
 		await prisma.$disconnect();

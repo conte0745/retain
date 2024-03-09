@@ -19,7 +19,6 @@ import Link from "next/link";
 
 export const Header = () => {
 	const { user } = useAuthContext();
-	console.log(user);
 	return (
 		<HStack bg={"gray.200"}>
 			<Box>

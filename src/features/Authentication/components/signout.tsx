@@ -19,7 +19,6 @@ export const SignOut = () => {
 				return response;
 			})
 			.catch((error) => {
-				console.log(error);
 				return error;
 			});
 

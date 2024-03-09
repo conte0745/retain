@@ -6,7 +6,6 @@ export async function OPTIONS() {
 	try {
 		return NextResponse.json({}, { headers: options });
 	} catch (e) {
-		console.log(e);
 		return NextResponse.json({ message: e }, { status: 500 });
 	}
 }
