@@ -1,9 +1,9 @@
 import { Question } from "@prisma/client";
 
 export const fetchQuestions = async () => {
-	const url = process.env.NEXT_PUBLIC_API_URL;
+	const url = process.env.NEXT_PUBLIC_VERCEL_URL;
 
-	const response: Question[] = await fetch(`${url}/question`)
+	const response: Question[] = await fetch(`${url}/api/question`)
 		.then((response) => {
 			return response.json();
 		})
