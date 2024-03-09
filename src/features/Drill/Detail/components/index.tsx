@@ -1,4 +1,3 @@
-"use client";
 import { FC, useEffect, useState } from "react";
 import { Question, AnswerResult, Answer } from "@prisma/client";
 import {
@@ -17,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { ChoiceAnswer } from "./choiceAnswer";
-import { LoadingAnswer } from "@Drill/components/loadingAnswer";
-import { fetchAnswers } from "@DrillDetail/hooks/fetchAnswers";
+import { LoadingAnswer } from "@/features/Drill/components/loadingAnswer";
+import { fetchAnswers } from "@/features/Drill/Detail/hooks/fetchAnswers";
 import { postAnswerResult } from "@/features/Drill/Detail/hooks/postAnswerResult";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -61,8 +60,8 @@ export const DetailDrill: FC = () => {
 				e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
 			);
 			setAnswers(answers);
+			setOnLoading(false);
 		})();
-		setOnLoading(false);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -107,7 +106,7 @@ export const DetailDrill: FC = () => {
 							{afterSubmit && (
 								<>
 									<Box>
-										<Text>{isCorrect ? "大正解" : "不正解"}</Text>
+										<Text>{isCorrect ? "正解！" : "不正解"}</Text>
 										<Text></Text>
 										<Text>{isCorrectAlphabets.toString()}</Text>
 									</Box>

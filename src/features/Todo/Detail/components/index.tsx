@@ -1,3 +1,5 @@
+"use client";
+
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { Todo } from "@prisma/client";
 import {

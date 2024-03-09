@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Todo } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Loading } from "@Todo/components/loading";
+import { Loading } from "@/features/Todo/components/loading";
 
 export const Show: FC<{
 	submitFlg: boolean;

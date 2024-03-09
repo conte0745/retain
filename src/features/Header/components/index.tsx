@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Box,
 	Button,
@@ -10,8 +12,10 @@ import {
 	Spacer,
 } from "@chakra-ui/react";
 import { SignOut } from "@Auth/components/signout";
-import { Link } from "react-router-dom";
+import classes from "@Header/components/index.module.scss";
+
 import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
+import Link from "next/link";
 
 export const Header = () => {
 	const { user } = useAuthContext();
@@ -19,7 +23,7 @@ export const Header = () => {
 	return (
 		<HStack bg={"gray.200"}>
 			<Box>
-				<Link to="/">
+				<Link href="/">
 					<Heading margin={"0.5rem"}>App</Heading>
 				</Link>
 			</Box>
@@ -33,19 +37,15 @@ export const Header = () => {
 				<MenuList>
 					{!user ||
 						(user!.isAnonymous && (
-							<MenuItem>
-								<Link to="/signin">
-									<Box>サインイン</Box>
-								</Link>
-							</MenuItem>
+							<Link href="/signin" className={classes.none_border}>
+								<MenuItem>サインイン</MenuItem>
+							</Link>
 						))}
 					{!user ||
 						(user!.isAnonymous && (
-							<MenuItem>
-								<Link to="/signup">
-									<Box>サインアップ</Box>
-								</Link>
-							</MenuItem>
+							<Link href="/signup" className={classes.none_border}>
+								<MenuItem>サインアップ</MenuItem>
+							</Link>
 						))}
 					{user && !user!.isAnonymous && (
 						<MenuItem>

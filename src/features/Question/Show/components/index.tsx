@@ -3,8 +3,8 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Question } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Loading } from "@Question/components/loading";
-import { fetchQuestions } from "@Question/Show/hooks/fetchQuestions";
+import { Loading } from "@/features/Question/components/loading";
+import { fetchQuestions } from "@/features/Question/Show/hooks/fetchQuestions";
 
 export const Show: FC<{
 	submitFlg: boolean;
@@ -18,8 +18,8 @@ export const Show: FC<{
 		setOnLoading(true);
 		(async () => {
 			setQuestions(await fetchQuestions());
+			setOnLoading(false);
 		})();
-		setOnLoading(false);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [submitFlg]);

@@ -1,14 +1,17 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import { Link } from "@chakra-ui/react";
 
 export const Top = () => {
 	return (
 		<>
 			<h1>Top</h1>
-			<Link to="./todo">TODO ページへ</Link>
+			<Link href="/question">Question</Link>
 			<br />
-			<Link to="./question">Question ページへ</Link>
+			<Link href="/drill">Drill</Link>
 			<br />
-			<Link to="./drill">Drill ページへ</Link>
+			<Link href="/todo">Todo</Link>
+			<br />
 		</>
 	);
 };

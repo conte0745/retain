@@ -1,12 +1,12 @@
 "use client";
-import { InputArea } from "@QuestionCreate/components";
-import { Show } from "@QuestionShow/components";
-import { ModalArea } from "@QuestionDetail/components";
+import { InputArea } from "@/features/Question/InputArea/components";
+import { Show } from "@/features/Question/Show/components";
+import { ModalArea } from "@/features/Question/Detail/components";
 import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Question } from "@prisma/client";
 
-export const Questions = () => {
+const Questions = () => {
 	const [submitFlg, setSubmitFlg] = useState<boolean>(true);
 	const [detailQuestion, setDetailQuestion] = useState<Question | undefined>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,3 +31,5 @@ export const Questions = () => {
 		</>
 	);
 };
+
+export default Questions;

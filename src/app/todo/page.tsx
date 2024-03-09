@@ -1,12 +1,12 @@
 "use client";
-import { InputArea } from "@TodoCreate/components";
-import { Show } from "@TodoShow/components";
-import { ModalArea } from "@TodoDetail/components";
+import { InputArea } from "@/features/Todo/InputArea/components";
+import { Show } from "@/features/Todo/Show/components";
+import { ModalArea } from "@/features/Todo/Detail/components";
 import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Todo } from "@prisma/client";
 
-export const Todos = () => {
+const Todos = () => {
 	const [submitFlg, setSubmitFlg] = useState<boolean>(true);
 	const [detailTodo, setDetailTodo] = useState<Todo | undefined>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,3 +31,5 @@ export const Todos = () => {
 		</>
 	);
 };
+
+export default Todos;

@@ -1,4 +1,5 @@
 "use client";
+
 import {
 	ReactNode,
 	createContext,
@@ -7,8 +8,6 @@ import {
 	useState,
 } from "react";
 import { AuthUserState, firebaseconfig } from "@/types/AuthUser";
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import { initializeApp } from "firebase/app";
 import { signInAnonymously } from "firebase/auth";
 
 const initialState: AuthUserState = {
@@ -20,25 +19,28 @@ type Props = { children: ReactNode };
 
 export const AuthProvider = ({ children }: Props) => {
 	const [user, setUser] = useState<AuthUserState>(initialState);
-	const app = initializeApp(firebaseconfig);
+	const [initialized, setInitialized] = useState(false);
 
 	useEffect(() => {
-		try {
-			const auth = getAuth(app);
-			return onAuthStateChanged(auth, (user) => {
-				if (!user) {
-					signInAnonymously(auth);
-				}
-				setUser({
-					user,
+		if (typeof window !== "undefined") {
+			// Check if running in the browser
+			import("firebase/app").then(({ initializeApp }) => {
+				const app = initializeApp(firebaseconfig);
+				import("@firebase/auth").then(({ getAuth, onAuthStateChanged }) => {
+					const auth = getAuth(app);
+					onAuthStateChanged(auth, (user) => {
+						if (!user) {
+							signInAnonymously(auth);
+						}
+						setUser({ user });
+						setInitialized(true);
+					});
 				});
 			});
-		} catch (error) {
-			setUser(initialState);
-			throw error;
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	if (!initialized) return null;
 
 	return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 };

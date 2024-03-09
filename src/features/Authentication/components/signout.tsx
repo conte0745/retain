@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, useToast } from "@chakra-ui/react";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
