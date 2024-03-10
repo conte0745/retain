@@ -12,6 +12,9 @@ export async function OPTIONS() {
 }
 
 export async function GET(_: NextRequest, { params }: { params: Params }) {
+	if (!isNumber(params.id)) {
+		return NextResponse.json({}, { headers: options });
+	}
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
@@ -25,10 +28,20 @@ export async function GET(_: NextRequest, { params }: { params: Params }) {
 				answer_id: "asc",
 			},
 		});
-		return NextResponse.json(answers, { headers: options });
+		const question = await prisma.question.findUnique({
+			where: {
+				question_id: targetId,
+			},
+		});
+		return NextResponse.json({ answers, question }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: "Error" }, { status: 500 });
 	} finally {
 		await prisma.$disconnect();
 	}
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isNumber(value: any): boolean {
+	return !Number.isNaN(parseInt(value));
 }

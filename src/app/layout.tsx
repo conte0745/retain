@@ -3,7 +3,6 @@ import { AuthProvider } from "@/features/Authentication/components/AuthProvider"
 import { Header } from "@/features/Header/components";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 
 // import { Metadata } from "next";
 // export const metadata: Metadata = {
@@ -24,10 +23,8 @@ export default function RootLayout({
 					<React.StrictMode>
 						<AuthProvider>
 							<ChakraProvider>
-								<BrowserRouter>
-									<Header></Header>
-									<Container>{children}</Container>
-								</BrowserRouter>
+								<Header></Header>
+								<Container>{children}</Container>
 							</ChakraProvider>
 						</AuthProvider>
 					</React.StrictMode>

@@ -5,14 +5,19 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
 	Input,
 	useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { AuthUser, firebaseconfig } from "@/types/AuthUser";
 import { FirebaseError, initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import {
+	createUserWithEmailAndPassword,
+	getAuth,
+	updateProfile,
+} from "firebase/auth";
+import { redirect } from "next/navigation";
 
 export const SignUp = () => {
 	const app = initializeApp(firebaseconfig);
@@ -22,7 +27,6 @@ export const SignUp = () => {
 		register,
 		formState: { errors, isSubmitting },
 	} = useForm<AuthUser>();
-	const navigate = useNavigate();
 	const toast = useToast();
 
 	const onSubmit = async (values: AuthUser) => {
@@ -35,6 +39,7 @@ export const SignUp = () => {
 			values.password!
 		)
 			.then((userCredential) => {
+				updateProfile(userCredential.user, { displayName: values.displayName });
 				return userCredential.user;
 			})
 			.catch((error) => {
@@ -57,13 +62,16 @@ export const SignUp = () => {
 				status: "success",
 				isClosable: true,
 			});
-			navigate("/todo");
 		}
 	};
+	if (!auth.currentUser?.isAnonymous) {
+		redirect("/drill");
+	}
 
 	return (
 		<>
-			<h1>サインアップ</h1>
+			<Heading>サインアップ</Heading>
+			<br />
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<FormControl isInvalid={errors.email && true}>
 					<FormLabel htmlFor="email">E-MAIL</FormLabel>
@@ -78,6 +86,7 @@ export const SignUp = () => {
 						{errors.email && errors.email.message}
 					</FormErrorMessage>
 				</FormControl>
+				<br />
 
 				<FormControl isInvalid={errors.password && true}>
 					<FormLabel htmlFor="password">PASSWORD</FormLabel>
@@ -92,6 +101,23 @@ export const SignUp = () => {
 						{errors.password && errors.password.message}
 					</FormErrorMessage>
 				</FormControl>
+				<br />
+
+				<FormControl isInvalid={errors.displayName && true}>
+					<FormLabel htmlFor="displayName">表示名（任意）</FormLabel>
+					<Input
+						id="displayName"
+						type="text"
+						{...register("displayName", {
+							maxLength: 10,
+						})}
+					/>
+					<FormErrorMessage>
+						{errors.displayName && errors.displayName.message}
+					</FormErrorMessage>
+				</FormControl>
+				<br />
+
 				<Button
 					size="sm"
 					colorScheme="teal"

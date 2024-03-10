@@ -14,11 +14,14 @@ import {
 import { SignOut } from "@Auth/components/signout";
 import classes from "@Header/components/index.module.scss";
 
-import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
+import { useAuthContext } from "@Auth/components/AuthProvider";
+import { usePathname } from "next/navigation";
+
 import Link from "next/link";
 
 export const Header = () => {
 	const { user } = useAuthContext();
+	const pathname = usePathname();
 	return (
 		<HStack bg={"gray.200"}>
 			<Box>
@@ -27,8 +30,12 @@ export const Header = () => {
 				</Link>
 			</Box>
 			<Spacer />
-			{!user || (user!.isAnonymous && <Box>匿名</Box>)}
-			{!user || (!user!.isAnonymous && <Box>{user.displayName}</Box>)}
+			<Box>
+				<Heading>{pathname.split("/")[1].toUpperCase()}</Heading>
+			</Box>
+			<Spacer />
+			{user && user!.isAnonymous && <Box>匿名</Box>}
+			{user && <Box>{user.displayName}</Box>}
 			<Menu>
 				<MenuButton as={Button} margin={"1.0rem 1.5rem 1.0em 0.5rem"}>
 					≡
