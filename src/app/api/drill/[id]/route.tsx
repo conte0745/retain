@@ -25,7 +25,12 @@ export async function GET(_: NextRequest, { params }: { params: Params }) {
 				answer_id: "asc",
 			},
 		});
-		return NextResponse.json(answers, { headers: options });
+		const question = await prisma.question.findUnique({
+			where: {
+				question_id: targetId,
+			},
+		});
+		return NextResponse.json({ answers, question }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: "Error" }, { status: 500 });
 	} finally {

@@ -3,6 +3,7 @@ import { User } from "firebase/auth";
 export type AuthUser = User & {
 	email: string;
 	password: string;
+	displayName: string | undefined | null;
 };
 
 export type AuthUserState = {

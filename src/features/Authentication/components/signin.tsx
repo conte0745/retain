@@ -7,6 +7,7 @@ import {
 	FormLabel,
 	Heading,
 	Input,
+	Text,
 	useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -14,7 +15,6 @@ import { AuthUser } from "@/types/AuthUser";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseconfig } from "@/types/AuthUser";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export const SignIn = () => {
@@ -27,7 +27,6 @@ export const SignIn = () => {
 	} = useForm<AuthUser>();
 	const toast = useToast();
 	const [errorMsg, setErrorMsg] = useState<string | undefined | null>();
-	const navigate = useNavigate();
 
 	const onSubmit = async (values: AuthUser) => {
 		if (!values.email && !values.password) {
@@ -40,7 +39,7 @@ export const SignIn = () => {
 			values.password!
 		)
 			.then((response) => {
-				return response.user;
+				return response;
 			})
 			.catch((response) => {
 				return response;
@@ -66,7 +65,6 @@ export const SignIn = () => {
 				isClosable: true,
 			});
 			setErrorMsg(undefined);
-			navigate("/todo");
 		}
 	};
 	return (
@@ -99,7 +97,7 @@ export const SignIn = () => {
 					<FormErrorMessage>
 						{errors.password && errors.password.message}
 					</FormErrorMessage>
-					<p className="error">{errorMsg}</p>
+					<Text color={"red"}>{errorMsg}</Text>
 				</FormControl>
 				<br />
 				<Button

@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from "react";
-import { Question, AnswerResult, Answer } from "@prisma/client";
+"use client";
+
+import { useEffect, useState } from "react";
 import {
 	Button,
 	Card,
@@ -16,24 +17,30 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { ChoiceAnswer } from "./choiceAnswer";
-import { LoadingAnswer } from "@/features/Drill/components/loadingAnswer";
-import { fetchAnswers } from "@/features/Drill/Detail/hooks/fetchAnswers";
-import { postAnswerResult } from "@/features/Drill/Detail/hooks/postAnswerResult";
-import { useLocation, useNavigate } from "react-router-dom";
+import { LoadingAnswer } from "@Drill/components/loadingAnswer";
+import { fetchAnswers } from "@Drill/Detail/hooks/fetchAnswers";
+import { postAnswerResult } from "@Drill/Detail/hooks/postAnswerResult";
+import { Answer, AnswerResult, Question } from "@prisma/client";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
 
-export const DetailDrill: FC = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
+export const DetailDrill = () => {
+	const searchParams = useSearchParams();
+	const question_id = searchParams.get("question_id") as unknown as number;
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 	const [afterSubmit, setAfterSubmit] = useState<boolean>(false);
 	const [isCorrect, setIsCorrect] = useState<boolean>(false);
+	const [isNotFoundQuestion, setIsNotFoundQuestion] = useState<boolean>(false);
 	const [answers, setAnswers] = useState<Answer[] | undefined | null>();
-	const detailQuestion: Question | undefined = location.state.question;
+	const [question, setQuestion] = useState<Question>();
 	const isCorrectAlphabets: number[] = [];
+	const { user } = useAuthContext();
 
 	const {
 		handleSubmit,
 		register,
+		setValue,
 		formState: { isSubmitting },
 	} = useForm<AnswerResult>({
 		mode: "onSubmit",
@@ -51,16 +58,26 @@ export const DetailDrill: FC = () => {
 	}
 
 	useEffect(() => {
-		if (!detailQuestion) return;
+		setValue("answer_result_is_correct", isCorrect);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isCorrect]);
+
+	useEffect(() => {
+		if (!question_id) return;
 
 		setOnLoading(true);
 		(async () => {
-			const response = await fetchAnswers(detailQuestion.question_id);
-			if (response != undefined || response != null) {
-				response.forEach((e, idx) =>
-					e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
+			const { answers, question } = await fetchAnswers(question_id);
+			if (question == undefined || answers == undefined) {
+				setIsNotFoundQuestion(true);
+			}
+			if (answers != undefined || answers != null) {
+				answers.forEach(
+					(e: { answer_is_correct_content: boolean }, idx: number) =>
+						e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
 				);
-				setAnswers(response);
+				setAnswers(answers);
+				setQuestion(question);
 			}
 			setOnLoading(false);
 		})();
@@ -79,76 +96,72 @@ export const DetailDrill: FC = () => {
 					{onLoading ? (
 						<LoadingAnswer></LoadingAnswer>
 					) : (
-						<>
-							<Box>
-								<Text>{detailQuestion?.question_title}</Text>
-							</Box>
-							<br />
-							<Box>
-								<Text>{detailQuestion?.question_content}</Text>
-							</Box>
-							<br />
+						!isNotFoundQuestion && (
+							<>
+								<Box>
+									<Text>{question?.question_title}</Text>
+								</Box>
+								<br />
+								<Box>
+									<Text>{question?.question_content}</Text>
+								</Box>
+								<br />
 
-							<Box borderWidth={"1px"} borderRadius={"md"} padding={"0.5rem"}>
-								{answers &&
-									answers.map((item, index) => (
-										<ChoiceAnswer
-											key={item.answer_id}
-											answer={item}
-											index={index}
-											setAfterSubmit={setAfterSubmit}
-											afterSubmit={afterSubmit}
-											setIsCorrect={setIsCorrect}
-										/>
-									))}
-							</Box>
+								<Box borderWidth={"1px"} borderRadius={"md"} padding={"0.5rem"}>
+									{answers &&
+										answers.map((item, index) => (
+											<ChoiceAnswer
+												key={item.answer_id}
+												answer={item}
+												index={index}
+												setAfterSubmit={setAfterSubmit}
+												afterSubmit={afterSubmit}
+												setIsCorrect={setIsCorrect}
+											/>
+										))}
+								</Box>
 
-							<br />
+								<br />
 
-							{afterSubmit && (
-								<>
-									<Box>
-										<Text>{isCorrect ? "正解！" : "不正解"}</Text>
-										<Text></Text>
-										<Text>{isCorrectAlphabets.toString()}</Text>
-									</Box>
-									<br />
-									<Box>
-										<Text>よくわかりそうな解説</Text>
-										<Text>{detailQuestion?.question_explanation}</Text>
-									</Box>
-									<HStack>
-										<Spacer />
-										<Text>FB :</Text>
-										<Text>
-											{detailQuestion?.question_count_incorrect_question}
-										</Text>
-									</HStack>
-								</>
-							)}
-						</>
+								{afterSubmit && (
+									<>
+										<Box>
+											<Text>{isCorrect ? "正解！" : "不正解"}</Text>
+											<Text></Text>
+											<Text>{isCorrectAlphabets.toString()}</Text>
+										</Box>
+										<br />
+										<Box>
+											<Text>よくわかりそうな解説</Text>
+											<br />
+											<Text>{question?.question_explanation}</Text>
+										</Box>
+										<HStack>
+											<Spacer />
+											<Text>FB :</Text>
+											<Text>{question?.question_count_incorrect_question}</Text>
+										</HStack>
+									</>
+								)}
+							</>
+						)
 					)}
+					{isNotFoundQuestion && <Box>問題が見つかりません。</Box>}
 				</CardBody>
 				<CardFooter>
-					<Button
-						colorScheme="teal"
-						mr={2}
-						onClick={() => {
-							navigate("/drill");
-						}}
-					>
+					<Link href={{ pathname: "/drill" }} as="/drill">
 						問題一覧に戻る
-					</Button>
+					</Link>
 					<Spacer />
 					<form onSubmit={handleSubmit(onSubmit)} id="update">
 						<Input
 							type="hidden"
-							defaultValue={undefined}
+							defaultValue={user?.isAnonymous ? -1 : user?.uid}
 							{...register("answer_result_user_uuid")}
 						/>
 						<Input
 							type="hidden"
-							defaultValue={detailQuestion?.question_id}
+							defaultValue={question_id}
 							{...register("answer_result_question_id")}
 						/>
 						<Input

@@ -4,14 +4,11 @@ import { Box, useToast } from "@chakra-ui/react";
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAuth, signOut } from "firebase/auth";
 import { firebaseconfig } from "@/types/AuthUser";
-import { useNavigate } from "react-router-dom";
 
 export const SignOut = () => {
 	const toast = useToast();
 	const app = initializeApp(firebaseconfig);
 	const auth = getAuth(app);
-
-	const navigate = useNavigate();
 
 	const onSubmit = async () => {
 		const response = signOut(auth)
@@ -37,8 +34,8 @@ export const SignOut = () => {
 				isClosable: true,
 			});
 		}
-		navigate("/signin");
 	};
+
 	return (
 		<>
 			<Box onClick={onSubmit}>サインアウト</Box>

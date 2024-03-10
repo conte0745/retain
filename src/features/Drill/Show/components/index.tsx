@@ -1,13 +1,12 @@
 import { FC } from "react";
-import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Question } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Loading } from "@/features/Drill/components/loading";
 import { fetchQuestions } from "@/features/Drill/Show/hooks/fetchQuestions";
-import { useNavigate } from "react-router-dom";
+import Link from "next/link";
 
 export const Show: FC = () => {
-	const navigate = useNavigate();
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
@@ -21,12 +20,6 @@ export const Show: FC = () => {
 			setOnLoading(false);
 		})();
 	}, []);
-
-	const onClickDetailBtn = function (question: Question) {
-		navigate(`detail`, {
-			state: { question: question },
-		});
-	};
 
 	let idx = 1;
 	return (
@@ -53,13 +46,16 @@ export const Show: FC = () => {
 										<Td>{!question.question_deleted_at && idx++}</Td>
 										<Td wordBreak={"break-word"}>{question.question_title}</Td>
 										<Td>
-											<Button
-												onClick={() => onClickDetailBtn(question)}
-												_hover={{ background: "blue.300" }}
-												size={"sm"}
+											<Link
+												href={{
+													pathname: "drill/detail",
+													query: {
+														question_id: question.question_id,
+													},
+												}}
 											>
 												詳細
-											</Button>
+											</Link>
 										</Td>
 									</Tr>
 								)
