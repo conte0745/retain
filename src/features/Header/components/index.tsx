@@ -15,16 +15,23 @@ import { SignOut } from "@Auth/components/signout";
 import classes from "@Header/components/index.module.scss";
 
 import { useAuthContext } from "@Auth/components/AuthProvider";
+import { usePathname } from "next/navigation";
+
 import Link from "next/link";
 
 export const Header = () => {
 	const { user } = useAuthContext();
+	const pathname = usePathname();
 	return (
 		<HStack bg={"gray.200"}>
 			<Box>
 				<Link href="/">
 					<Heading margin={"0.5rem"}>App</Heading>
 				</Link>
+			</Box>
+			<Spacer />
+			<Box>
+				<Heading>{pathname.split("/")[1].toUpperCase()}</Heading>
 			</Box>
 			<Spacer />
 			{user && user!.isAnonymous && <Box>匿名</Box>}

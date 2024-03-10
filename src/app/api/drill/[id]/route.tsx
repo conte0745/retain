@@ -12,6 +12,9 @@ export async function OPTIONS() {
 }
 
 export async function GET(_: NextRequest, { params }: { params: Params }) {
+	if (!isNumber(params.id)) {
+		return NextResponse.json({}, { headers: options });
+	}
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
@@ -36,4 +39,9 @@ export async function GET(_: NextRequest, { params }: { params: Params }) {
 	} finally {
 		await prisma.$disconnect();
 	}
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isNumber(value: any): boolean {
+	return !Number.isNaN(parseInt(value));
 }

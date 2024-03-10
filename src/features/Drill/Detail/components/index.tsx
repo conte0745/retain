@@ -24,12 +24,14 @@ import { Answer, AnswerResult, Question } from "@prisma/client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
+import styles from "./styles.module.css";
 
 export const DetailDrill = () => {
 	const searchParams = useSearchParams();
 	const question_id = searchParams.get("question_id") as unknown as number;
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 	const [afterSubmit, setAfterSubmit] = useState<boolean>(false);
+	const [afterPost, setAfterPost] = useState<boolean>(false);
 	const [isCorrect, setIsCorrect] = useState<boolean>(false);
 	const [isNotFoundQuestion, setIsNotFoundQuestion] = useState<boolean>(false);
 	const [answers, setAnswers] = useState<Answer[] | undefined | null>();
@@ -49,11 +51,16 @@ export const DetailDrill = () => {
 
 	async function onSubmit(values: AnswerResult) {
 		try {
-			await postAnswerResult(values);
+			if (afterSubmit && !afterPost && !isNotFoundQuestion) {
+				const uid = user?.isAnonymous ? undefined : user?.uid;
+				await postAnswerResult(values, uid);
+				setAfterPost(true);
+				console.log("post");
+			}
 		} catch (e) {
 			console.error(e);
 		} finally {
-			setAfterSubmit(!afterSubmit);
+			setAfterSubmit(true);
 		}
 	}
 
@@ -138,8 +145,8 @@ export const DetailDrill = () => {
 										</Box>
 										<HStack>
 											<Spacer />
-											<Text>FB :</Text>
-											<Text>{question?.question_count_incorrect_question}</Text>
+											{/* <Text>FB :</Text>
+											<Text>{question?.question_count_incorrect_question}</Text> */}
 										</HStack>
 									</>
 								)}
@@ -149,16 +156,15 @@ export const DetailDrill = () => {
 					{isNotFoundQuestion && <Box>問題が見つかりません。</Box>}
 				</CardBody>
 				<CardFooter>
-					<Link href={{ pathname: "/drill" }} as="/drill">
+					<Link
+						href={{ pathname: "/drill" }}
+						as="/drill"
+						className={styles.link}
+					>
 						問題一覧に戻る
 					</Link>
 					<Spacer />
-					<form onSubmit={handleSubmit(onSubmit)} id="update">
-						<Input
-							type="hidden"
-							defaultValue={user?.isAnonymous ? -1 : user?.uid}
-							{...register("answer_result_user_uuid")}
-						/>
+					<form onSubmit={handleSubmit(onSubmit)} id="next">
 						<Input
 							type="hidden"
 							defaultValue={question_id}
@@ -173,7 +179,7 @@ export const DetailDrill = () => {
 							colorScheme="teal"
 							mr={2}
 							isLoading={isSubmitting}
-							form="update"
+							form="next"
 							type="submit"
 						>
 							次へ
