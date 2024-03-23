@@ -16,6 +16,11 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="ja">
+			<head>
+				<title>QQQ</title>
+				<link rel="apple-touch-icon" sizes="32x32" href="/public/icon.png" />
+				<link rel="icon" sizes="32x32" href="/public/icon.png" />
+			</head>
 			<body>
 				{/* Layout UI */}
 				<main>
