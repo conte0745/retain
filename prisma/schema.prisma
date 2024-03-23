@@ -46,10 +46,13 @@ model Question {
   question_created_at DateTime @default(now())
   question_updated_at DateTime?
   question_deleted_at DateTime?
+  answers Answer[]
+  result AnswerResult[]
 }
 
 model Answer {
   answer_id Int @id @default(autoincrement())
+  question Question @relation(fields: [question_id], references: [question_id])
   question_id Int
   answer_content String
   answer_is_correct_content Boolean @default(false)
@@ -65,4 +68,5 @@ model AnswerResult {
   answer_result_question_id Int
   answer_result_user_uuid String?
   answer_result_is_correct Boolean?
+  questions Question[]
 }

@@ -1,4 +1,3 @@
-"use client";
 import { AuthProvider } from "@/features/Authentication/components/AuthProvider";
 import { Header } from "@/features/Header/components";
 import { ChakraProvider, Container } from "@chakra-ui/react";

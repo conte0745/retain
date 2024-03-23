@@ -5,18 +5,16 @@ import { Dispatch } from "react";
 type props = {
 	answer: Answer;
 	index: number;
-	afterSubmit: boolean;
-	setAfterSubmit: Dispatch<boolean>;
-	setIsCorrect: Dispatch<boolean>;
+	onClickAnswerIndex: number | undefined;
+	setOnClickAnswerIndex: Dispatch<number | undefined>;
 };
 
 export const ChoiceAnswer: React.FC<props> = (props) => {
-	const alphabet = "abcdefghijklmnopqrstuvwxyz";
+	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	const onClickChoice = () => {
-		if (!props.afterSubmit) {
-			props.setAfterSubmit(true);
-			props.setIsCorrect(props.answer.answer_is_correct_content);
+		if (props.onClickAnswerIndex === undefined) {
+			props.setOnClickAnswerIndex(props.index);
 		}
 	};
 	return (
