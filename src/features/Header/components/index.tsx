@@ -31,7 +31,7 @@ export const Header = () => {
 			</Box>
 			<Spacer />
 			<Box>
-				<Heading>{pathname.split("/")[1].toUpperCase()}</Heading>
+				<Heading size={"lg"}>{pathname.split("/")[1].toUpperCase()}</Heading>
 			</Box>
 			<Spacer />
 			{user && user!.isAnonymous && <Box>匿名</Box>}

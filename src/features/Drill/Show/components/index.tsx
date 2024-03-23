@@ -1,25 +1,17 @@
+"use client";
+
 import { FC } from "react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { Question } from "@prisma/client";
-import { useEffect, useState } from "react";
 import { Loading } from "@/features/Drill/components/loading";
-import { fetchQuestions } from "@/features/Drill/Show/hooks/fetchQuestions";
+import { useFetchDrill } from "@/features/Drill/Show/hooks/useFetchDrill";
 import Link from "next/link";
 
 export const Show: FC = () => {
-	const [questions, setQuestions] = useState<Question[]>([]);
-	const [onLoading, setOnLoading] = useState<boolean>(true);
+	const { questions, isLoading, isError } = useFetchDrill();
 
-	useEffect(() => {
-		setOnLoading(true);
-		(async () => {
-			const response = await fetchQuestions();
-			if (response != undefined || response != null) {
-				setQuestions(response);
-			}
-			setOnLoading(false);
-		})();
-	}, []);
+	if (isError) {
+		return <div>Error occurred.</div>;
+	}
 
 	let idx = 1;
 	return (
@@ -33,34 +25,31 @@ export const Show: FC = () => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{onLoading ? (
+					{isLoading ? (
 						<Loading></Loading>
 					) : (
-						questions.map((question) => {
-							return (
-								!question.question_deleted_at && (
-									<Tr
-										key={question.question_id}
-										_hover={{ background: "gray.100" }}
+						questions &&
+						questions.map((question) => (
+							<Tr
+								key={question.question_id}
+								_hover={{ background: "gray.100" }}
+							>
+								<Td>{idx++}</Td>
+								<Td wordBreak={"break-word"}>{question.question_title}</Td>
+								<Td>
+									<Link
+										href={{
+											pathname: "drill/detail",
+											query: {
+												question_id: question.question_id,
+											},
+										}}
 									>
-										<Td>{!question.question_deleted_at && idx++}</Td>
-										<Td wordBreak={"break-word"}>{question.question_title}</Td>
-										<Td>
-											<Link
-												href={{
-													pathname: "drill/detail",
-													query: {
-														question_id: question.question_id,
-													},
-												}}
-											>
-												詳細
-											</Link>
-										</Td>
-									</Tr>
-								)
-							);
-						})
+										詳細
+									</Link>
+								</Td>
+							</Tr>
+						))
 					)}
 				</Tbody>
 			</Table>

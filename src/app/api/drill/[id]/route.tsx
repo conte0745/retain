@@ -13,29 +13,25 @@ export async function OPTIONS() {
 
 export async function GET(_: NextRequest, { params }: { params: Params }) {
 	if (!isNumber(params.id)) {
-		return NextResponse.json({}, { headers: options });
+		return NextResponse.json({ message: "notFound" }, { headers: options });
 	}
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		const answers = await prisma.answer.findMany({
+		const questions = await prisma.question.findUnique({
 			where: {
 				question_id: targetId,
-				answer_public_flag: true,
-				answer_deleted_flag: false,
+				question_public_flag: true,
+				question_deleted_at: null,
 			},
-			orderBy: {
-				answer_id: "asc",
-			},
-		});
-		const question = await prisma.question.findUnique({
-			where: {
-				question_id: targetId,
+			include: {
+				answers: true,
 			},
 		});
-		return NextResponse.json({ answers, question }, { headers: options });
+
+		return NextResponse.json({ questions }, { headers: options });
 	} catch (e) {
-		return NextResponse.json({ message: "Error" }, { status: 500 });
+		return NextResponse.json({ message: e }, { status: 500 });
 	} finally {
 		await prisma.$disconnect();
 	}

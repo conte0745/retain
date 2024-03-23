@@ -1,4 +1,3 @@
-"use client";
 import { AuthProvider } from "@/features/Authentication/components/AuthProvider";
 import { Header } from "@/features/Header/components";
 import { ChakraProvider, Container } from "@chakra-ui/react";
@@ -17,6 +16,11 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="ja">
+			<head>
+				<title>QQQ</title>
+				<link rel="apple-touch-icon" sizes="32x32" href="/public/icon.png" />
+				<link rel="icon" sizes="32x32" href="/public/icon.png" />
+			</head>
 			<body>
 				{/* Layout UI */}
 				<main>

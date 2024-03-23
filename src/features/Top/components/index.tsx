@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@chakra-ui/react";
+import Link from "next/link";
 
 export const Top = () => {
 	return (

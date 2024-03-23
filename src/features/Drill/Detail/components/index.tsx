@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
 	Button,
 	Card,
@@ -9,7 +9,6 @@ import {
 	Text,
 	CardBody,
 	CardFooter,
-	HStack,
 	Input,
 	Spacer,
 	Heading,
@@ -18,25 +17,21 @@ import {
 import { useForm } from "react-hook-form";
 import { ChoiceAnswer } from "./choiceAnswer";
 import { LoadingAnswer } from "@Drill/components/loadingAnswer";
-import { fetchAnswers } from "@Drill/Detail/hooks/fetchAnswers";
+import { useFetchAnswers } from "@Drill/Detail/hooks/useFetchAnswers";
 import { postAnswerResult } from "@Drill/Detail/hooks/postAnswerResult";
-import { Answer, AnswerResult, Question } from "@prisma/client";
+import { AnswerResult } from "@prisma/client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
+import { useAuthContext } from "@Auth/components/AuthProvider";
 import styles from "./styles.module.css";
 
 export const DetailDrill = () => {
 	const searchParams = useSearchParams();
 	const question_id = searchParams.get("question_id") as unknown as number;
-	const [onLoading, setOnLoading] = useState<boolean>(true);
-	const [afterSubmit, setAfterSubmit] = useState<boolean>(false);
+	const [onClickAnswerIndex, setOnClickAnswerIndex] = useState<
+		number | undefined
+	>(undefined);
 	const [afterPost, setAfterPost] = useState<boolean>(false);
-	const [isCorrect, setIsCorrect] = useState<boolean>(false);
-	const [isNotFoundQuestion, setIsNotFoundQuestion] = useState<boolean>(false);
-	const [answers, setAnswers] = useState<Answer[] | undefined | null>();
-	const [question, setQuestion] = useState<Question>();
-	const isCorrectAlphabets: number[] = [];
 	const { user } = useAuthContext();
 
 	const {
@@ -51,46 +46,28 @@ export const DetailDrill = () => {
 
 	async function onSubmit(values: AnswerResult) {
 		try {
-			if (afterSubmit && !afterPost && !isNotFoundQuestion) {
+			setValue(
+				"answer_result_is_correct",
+				onClickAnswerIndex == correctAnswerIndex
+			);
+			if (onClickAnswerIndex !== undefined && !afterPost) {
 				const uid = user?.isAnonymous ? undefined : user?.uid;
 				await postAnswerResult(values, uid);
 				setAfterPost(true);
-				console.log("post");
 			}
 		} catch (e) {
 			console.error(e);
 		} finally {
-			setAfterSubmit(true);
+			setOnClickAnswerIndex(undefined);
 		}
 	}
 
-	useEffect(() => {
-		setValue("answer_result_is_correct", isCorrect);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isCorrect]);
+	const { question, correctAnswerIndex, isLoading, isError } =
+		useFetchAnswers(question_id);
 
-	useEffect(() => {
-		if (!question_id) return;
-
-		setOnLoading(true);
-		(async () => {
-			const { answers, question } = await fetchAnswers(question_id);
-			if (question == undefined || answers == undefined) {
-				setIsNotFoundQuestion(true);
-			}
-			if (answers != undefined || answers != null) {
-				answers.forEach(
-					(e: { answer_is_correct_content: boolean }, idx: number) =>
-						e.answer_is_correct_content ? isCorrectAlphabets.push(idx) : ""
-				);
-				setAnswers(answers);
-				setQuestion(question);
-			}
-			setOnLoading(false);
-		})();
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	if (isError) {
+		return <div>Error occurred.</div>;
+	}
 
 	return (
 		<>
@@ -100,10 +77,10 @@ export const DetailDrill = () => {
 				</CardHeader>
 				<Divider />
 				<CardBody pb={6}>
-					{onLoading ? (
+					{isLoading ? (
 						<LoadingAnswer></LoadingAnswer>
 					) : (
-						!isNotFoundQuestion && (
+						question && (
 							<>
 								<Box>
 									<Text>{question?.question_title}</Text>
@@ -113,29 +90,42 @@ export const DetailDrill = () => {
 									<Text>{question?.question_content}</Text>
 								</Box>
 								<br />
-
 								<Box borderWidth={"1px"} borderRadius={"md"} padding={"0.5rem"}>
-									{answers &&
-										answers.map((item, index) => (
+									{question.answers &&
+										question.answers.map((item, index) => (
 											<ChoiceAnswer
 												key={item.answer_id}
 												answer={item}
 												index={index}
-												setAfterSubmit={setAfterSubmit}
-												afterSubmit={afterSubmit}
-												setIsCorrect={setIsCorrect}
+												setOnClickAnswerIndex={setOnClickAnswerIndex}
+												onClickAnswerIndex={onClickAnswerIndex}
 											/>
 										))}
 								</Box>
-
 								<br />
-
-								{afterSubmit && (
+								{onClickAnswerIndex !== undefined && (
 									<>
 										<Box>
-											<Text>{isCorrect ? "正解！" : "不正解"}</Text>
-											<Text></Text>
-											<Text>{isCorrectAlphabets.toString()}</Text>
+											<Text>
+												{onClickAnswerIndex === correctAnswerIndex
+													? "正解 （☆∀☆）"
+													: "不正解 (;△;)"}
+											</Text>
+											<Text size={"xs"} color={"gray"}>
+												（あなたの回答：
+												{onClickAnswerIndex !== undefined
+													? String.fromCharCode(65 + onClickAnswerIndex)
+													: ""}
+												）
+											</Text>
+											<br />
+
+											<Text>
+												正解択：
+												{correctAnswerIndex !== undefined
+													? String.fromCharCode(65 + correctAnswerIndex)
+													: ""}{" "}
+											</Text>
 										</Box>
 										<br />
 										<Box>
@@ -143,17 +133,12 @@ export const DetailDrill = () => {
 											<br />
 											<Text>{question?.question_explanation}</Text>
 										</Box>
-										<HStack>
-											<Spacer />
-											{/* <Text>FB :</Text>
-											<Text>{question?.question_count_incorrect_question}</Text> */}
-										</HStack>
 									</>
 								)}
 							</>
 						)
 					)}
-					{isNotFoundQuestion && <Box>問題が見つかりません。</Box>}
+					{!question && !isLoading && <Box>問題が見つかりません。</Box>}
 				</CardBody>
 				<CardFooter>
 					<Link
