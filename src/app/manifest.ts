@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
 		short_name: "QQQ",
 		description: "QQQ",
 		start_url: "/",
-		display: "standalone",
+		display: "browser",
 		background_color: "#fff",
 		theme_color: "#fff",
 		icons: [
