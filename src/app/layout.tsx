@@ -1,6 +1,7 @@
 import { AuthProvider } from "@/features/Authentication/components/AuthProvider";
 import { Header } from "@/features/Header/components";
 import { ChakraProvider, Container } from "@chakra-ui/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import React from "react";
 
 // import { Metadata } from "next";
@@ -18,8 +19,8 @@ export default function RootLayout({
 		<html lang="ja">
 			<head>
 				<title>QQQ</title>
-				<link rel="apple-touch-icon" sizes="32x32" href="/public/icon.png" />
-				<link rel="icon" sizes="32x32" href="/public/icon.png" />
+				<link rel="apple-touch-icon" sizes="32x32" href="icon.png" />
+				<link rel="icon" sizes="32x32" href="icon.png" />
 			</head>
 			<body>
 				{/* Layout UI */}
@@ -33,6 +34,7 @@ export default function RootLayout({
 						</AuthProvider>
 					</React.StrictMode>
 				</main>
+				<SpeedInsights />
 			</body>
 		</html>
 	);
