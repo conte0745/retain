@@ -9,7 +9,7 @@ import {
 	HStack,
 	useToast,
 } from "@chakra-ui/react";
-import { Todo } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 
 export const InputArea: FC<{
 	submitFlg: boolean;
@@ -20,14 +20,14 @@ export const InputArea: FC<{
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>({ reValidateMode: "onSubmit" });
 	const toast = useToast();
 
-	async function onSubmit(values: Todo) {
+	async function onSubmit(values: Vocabulary) {
 		if (values.content === "") {
 			return;
 		}
-		await fetch(`api/todo`, {
+		await fetch(`api/vocabulary`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
@@ -64,11 +64,12 @@ export const InputArea: FC<{
 						colorScheme="teal"
 						isLoading={isSubmitting}
 						type="submit"
+						className="vocabulary-submit"
 					>
 						追加
 					</Button>
 				</HStack>
-				<FormErrorMessage>
+				<FormErrorMessage className="error">
 					{errors.content && errors.content.message}
 				</FormErrorMessage>
 			</FormControl>

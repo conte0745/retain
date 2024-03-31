@@ -28,9 +28,10 @@ model User {
   user_deleted_at DateTime?
 }
 
-model Todo {
+model Vocabulary {
   todo_id Int @id @default(autoincrement())
   content String
+  description String?
   created_at DateTime @default(now())
   updated_at DateTime?
   deleted_at DateTime?

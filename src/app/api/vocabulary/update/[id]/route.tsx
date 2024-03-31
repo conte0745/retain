@@ -20,9 +20,9 @@ export async function POST(
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		await prisma.todo.update({
+		await prisma.vocabulary.update({
 			where: {
-				todo_id: targetId,
+				vocabulary_id: targetId,
 			},
 			data: {
 				content: content,

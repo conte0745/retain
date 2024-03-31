@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import { Todo } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 import {
 	Button,
 	Modal,
@@ -25,8 +25,8 @@ export const ModalArea: FC<{
 	onClose: () => void;
 	submitFlg: boolean;
 	setSubmitFlg: Dispatch<SetStateAction<boolean>>;
-	detailTodo: Todo | undefined;
-}> = ({ isOpen, onClose, submitFlg, setSubmitFlg, detailTodo }) => {
+	detailVocabulary: Vocabulary | undefined;
+}> = ({ isOpen, onClose, submitFlg, setSubmitFlg, detailVocabulary }) => {
 	const initialRef = useRef(null);
 	const finalRef = useRef(null);
 	const toast = useToast();
@@ -37,21 +37,21 @@ export const ModalArea: FC<{
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>();
 
 	const {
 		handleSubmit: handleDelSubmit,
 		register: delRegister,
 		setValue: setDelValue,
 		formState: { isSubmitting: isDelSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>();
 
-	async function onUpdateSubmit(values: Todo) {
+	async function onUpdateSubmit(values: Vocabulary) {
 		if (values.content === "") {
 			return;
 		}
 
-		await fetch(`/api/todo/update/${values.todo_id}`, {
+		await fetch(`/api/vocabulary/update/${values.vocabulary_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
@@ -74,8 +74,8 @@ export const ModalArea: FC<{
 			.catch((e) => console.error(e));
 	}
 
-	async function onDeleteSubmit(values: Todo) {
-		await fetch(`todo/delete/${values.todo_id}`, {
+	async function onDeleteSubmit(values: Vocabulary) {
+		await fetch(`api/vocabulary/delete/${values.vocabulary_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
@@ -99,12 +99,15 @@ export const ModalArea: FC<{
 
 	useEffect(() => {
 		if (isOpen) {
-			setValue("content", detailTodo?.content ?? "");
-			setValue("todo_id", Number(detailTodo?.todo_id) ?? "");
-			setDelValue("todo_id", Number(detailTodo?.todo_id) ?? "");
+			setValue("content", detailVocabulary?.content ?? "");
+			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
+			setDelValue(
+				"vocabulary_id",
+				Number(detailVocabulary?.vocabulary_id) ?? ""
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [detailTodo?.todo_id]);
+	}, [detailVocabulary?.vocabulary_id]);
 
 	return (
 		<>
@@ -116,14 +119,14 @@ export const ModalArea: FC<{
 			>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Todo</ModalHeader>
+					<ModalHeader>Vocabulary</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>
 						<form onSubmit={handleSubmit(onUpdateSubmit)} id="update">
 							<FormControl isInvalid={errors.content && true}>
 								<FormLabel htmlFor="update_content">内容</FormLabel>
 								<Input
-									defaultValue={detailTodo?.content}
+									defaultValue={detailVocabulary?.content}
 									id="update_content"
 									{...register("content", {
 										required: "必須項目です。",
@@ -135,22 +138,22 @@ export const ModalArea: FC<{
 								/>
 								<Input
 									type="hidden"
-									defaultValue={detailTodo?.todo_id}
-									{...register("todo_id")}
+									defaultValue={detailVocabulary?.vocabulary_id}
+									{...register("vocabulary_id")}
 								/>
 								<FormErrorMessage>
 									{errors.content && errors.content.message}
 								</FormErrorMessage>
 
-								<Badge>{`作成日：${detailTodo?.created_at.toLocaleString(
+								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
 									"ja-JP",
 									options
 								)}`}</Badge>
 								<br />
-								{!detailTodo?.updated_at ? (
+								{!detailVocabulary?.updated_at ? (
 									""
 								) : (
-									<Badge>{`更新日：${detailTodo?.updated_at.toLocaleString(
+									<Badge>{`更新日：${detailVocabulary?.updated_at.toLocaleString(
 										"ja-JP",
 										options
 									)}`}</Badge>
@@ -161,8 +164,8 @@ export const ModalArea: FC<{
 					<form onSubmit={handleDelSubmit(onDeleteSubmit)} id="delete">
 						<Input
 							type="hidden"
-							defaultValue={detailTodo?.todo_id}
-							{...delRegister("todo_id")}
+							defaultValue={detailVocabulary?.vocabulary_id}
+							{...delRegister("vocabulary_id")}
 						/>
 					</form>
 					<ModalFooter>

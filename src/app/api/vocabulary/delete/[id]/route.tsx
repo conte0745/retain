@@ -15,14 +15,15 @@ export async function POST(_: NextRequest, { params }: { params: Params }) {
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		await prisma.todo.update({
+		await prisma.vocabulary.update({
 			where: {
-				todo_id: targetId,
+				vocabulary_id: targetId,
 			},
 			data: {
 				deleted_at: getNow(),
 			},
 		});
+		console.log("del");
 		return NextResponse.json({ status: 200 }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: e }, { status: 500 });

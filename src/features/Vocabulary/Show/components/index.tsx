@@ -1,4 +1,3 @@
-"use client";
 import { Dispatch, FC, SetStateAction } from "react";
 import {
 	Button,
@@ -10,36 +9,44 @@ import {
 	Tr,
 	useColorMode,
 } from "@chakra-ui/react";
-import { Question } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Loading } from "@/features/Question/components/loading";
-import { fetchQuestions } from "@/features/Question/Show/hooks/fetchQuestions";
+import { Loading } from "@/features/Vocabulary/components/loading";
 
 export const Show: FC<{
 	submitFlg: boolean;
 	onOpen: () => void;
-	setDetailQuestion: Dispatch<SetStateAction<Question | undefined>>;
-}> = ({ submitFlg, onOpen, setDetailQuestion }) => {
+	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary | undefined>>;
+}> = ({ submitFlg, onOpen, setDetailVocabulary }) => {
 	const { colorMode } = useColorMode();
-	const [questions, setQuestions] = useState<Question[]>([]);
+	const [vocabularies, setVocabularys] = useState<Vocabulary[]>([]);
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		setOnLoading(true);
-		(async () => {
-			const response = await fetchQuestions();
-			if (response != undefined || response != null) {
-				setQuestions(response);
-			}
-			setOnLoading(false);
-		})();
+		const getVocabularys = async () => {
+			const response: Vocabulary[] = await fetch(`/api/vocabulary`)
+				.then((response) => response.json())
+				.catch((e) => {
+					console.error(e);
+				})
+				.finally(() => {
+					setOnLoading(false);
+				});
 
+			response.forEach((e) => {
+				e.created_at = new Date(e.created_at);
+				e.updated_at = e.updated_at ? new Date(e.updated_at) : null;
+			});
+			setVocabularys(response);
+		};
+		getVocabularys();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [submitFlg]);
 
-	const onClickEditBtn = function (Question: Question) {
+	const onClickEditBtn = function (vocabulary: Vocabulary) {
 		onOpen();
-		setDetailQuestion(Question);
+		setDetailVocabulary(vocabulary);
 	};
 
 	let idx = 1;
@@ -48,8 +55,8 @@ export const Show: FC<{
 			<Table m={"0.5rem"} variant={"simple"} width={"100%"}>
 				<Thead bg={colorMode === "light" ? "gray.100" : "gray.900"}>
 					<Tr>
-						<Th>No</Th>
-						<Th>タイトル</Th>
+						<Th>ID</Th>
+						<Th>内容</Th>
 						<Th></Th>
 					</Tr>
 				</Thead>
@@ -57,22 +64,22 @@ export const Show: FC<{
 					{onLoading ? (
 						<Loading></Loading>
 					) : (
-						questions.map((question) => {
+						vocabularies.map((vocabulary) => {
 							return (
-								!question.question_deleted_at && (
+								!vocabulary.deleted_at && (
 									<Tr
-										key={question.question_id}
+										key={vocabulary.vocabulary_id}
 										_hover={{
 											background:
 												colorMode === "light" ? "gray.100" : "blackAlpha.700",
 										}}
 									>
-										<Td>{!question.question_deleted_at && idx++}</Td>
-										<Td wordBreak={"break-word"}>{question.question_title}</Td>
+										<Td>{!vocabulary.deleted_at && idx++}</Td>
+										<Td wordBreak={"break-word"}>{vocabulary.content}</Td>
 										<Td>
 											<Button
 												size={"xs"}
-												onClick={() => onClickEditBtn(question)}
+												onClick={() => onClickEditBtn(vocabulary)}
 												_hover={{ background: "blue.300" }}
 											>
 												編集
