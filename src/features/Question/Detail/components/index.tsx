@@ -62,13 +62,13 @@ export const ModalArea: FC<{
 		mode: "onSubmit",
 		reValidateMode: "onSubmit",
 		defaultValues: {
-			answers: [{}],
+			Answer: [{}],
 		},
 	});
 	const questionPublicFlag = watch("question_public_flag");
 
 	const { fields, append, remove } = useFieldArray<QuestionAnswer>({
-		name: "answers",
+		name: "Answer",
 		control: control,
 	});
 
@@ -144,7 +144,7 @@ export const ModalArea: FC<{
 		(async () => {
 			const response = await fetchAnswers(detailQuestion!.question_id);
 			if (response != undefined || response != null)
-				setValue("answers", response);
+				setValue("Answer", response);
 			setOnLoading(false);
 		})();
 

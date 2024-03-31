@@ -1,7 +1,7 @@
 import { Answer, Question } from "@prisma/client";
 
 export type QuestionAnswer = Question & {
-	answers: Answer[];
+	Answer: Answer[];
 };
 
 export const initAnswers: Answer = {

@@ -21,7 +21,6 @@ export async function POST(
 	const isNgDescription = ngList.some((ng) => description.includes(ng));
 
 	if (isNgTitle || isNgDescription) {
-		console.log("ng");
 		return NextResponse.json({ message: "NG" }, { status: 200 });
 	}
 

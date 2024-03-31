@@ -45,7 +45,7 @@ export const InputChoice: React.FC<props> = (props) => {
 					colorScheme="blue"
 					defaultChecked={props.answer?.answer_public_flag}
 					{...props.register(
-						`answers.${props.index}.answer_public_flag` as const,
+						`Answer.${props.index}.answer_public_flag` as const,
 						{ onChange: () => setIsPublic(!isPublic) }
 					)}
 				>
@@ -55,7 +55,7 @@ export const InputChoice: React.FC<props> = (props) => {
 					colorScheme="green"
 					defaultChecked={props.answer?.answer_is_correct_content}
 					{...props.register(
-						`answers.${props.index}.answer_is_correct_content` as const,
+						`Answer.${props.index}.answer_is_correct_content` as const,
 						{ onChange: () => setIsCorrect(!isCorrect) }
 					)}
 				>
@@ -75,7 +75,7 @@ export const InputChoice: React.FC<props> = (props) => {
 						colorScheme="red"
 						defaultChecked={props.answer?.answer_deleted_flag}
 						{...props.register(
-							`answers.${props.index}.answer_deleted_flag` as const
+							`Answer.${props.index}.answer_deleted_flag` as const
 						)}
 					>
 						削除
@@ -83,12 +83,12 @@ export const InputChoice: React.FC<props> = (props) => {
 				)}
 			</HStack>
 			<FormControl
-				isInvalid={props.errors.answers?.[props.index]?.answer_content && true}
+				isInvalid={props.errors.Answer?.[props.index]?.answer_content && true}
 			>
 				<Textarea
 					defaultValue={props.answer?.answer_content ?? ""}
 					id={`answer_${props.index}`}
-					{...props.register(`answers.${props.index}.answer_content` as const, {
+					{...props.register(`Answer.${props.index}.answer_content` as const, {
 						required: "必須項目です。",
 						maxLength: {
 							value: 190,
@@ -100,11 +100,11 @@ export const InputChoice: React.FC<props> = (props) => {
 					type="hidden"
 					defaultValue={props.answer?.answer_id ?? -1}
 					id={`answer_id_${props.index}`}
-					{...props.register(`answers.${props.index}.answer_id` as const)}
+					{...props.register(`Answer.${props.index}.answer_id` as const)}
 				/>
 
 				<FormErrorMessage>
-					{props.errors.answers?.[props.index]?.answer_content?.message}
+					{props.errors.Answer?.[props.index]?.answer_content?.message}
 				</FormErrorMessage>
 			</FormControl>
 		</>

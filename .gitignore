@@ -34,8 +34,5 @@ prisma/migrations
 .env
 .env.local
 
-# slack
-src/features/App/components/Slack.tsx
-
 # 禁止元ワードリスト
 kinshi.csv
