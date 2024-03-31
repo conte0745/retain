@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Params } from "react-router-dom";
-import { options } from "@/app/api/utils";
+import { getNgList, options } from "@/app/api/utils";
 import prisma from "@/app/db";
 
 export async function OPTIONS() {
@@ -16,6 +16,14 @@ export async function POST(
 	{ params }: { params: Params }
 ) {
 	const { title, description } = await request.json();
+	const ngList = getNgList().split(",");
+	const isNgTitle = ngList.some((ng) => title.includes(ng));
+	const isNgDescription = ngList.some((ng) => description.includes(ng));
+
+	if (isNgTitle || isNgDescription) {
+		console.log("ng");
+		return NextResponse.json({ message: "NG" }, { status: 200 });
+	}
 
 	try {
 		const targetId: number = Number(params.id);
@@ -31,7 +39,7 @@ export async function POST(
 			},
 		});
 
-		return NextResponse.json({ status: 200 });
+		return NextResponse.json({ message: "OK" }, { status: 200 });
 	} catch (e) {
 		console.error(e);
 		return NextResponse.json({ message: "Error" + e }, { status: 500 });

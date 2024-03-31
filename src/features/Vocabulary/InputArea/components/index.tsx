@@ -34,15 +34,25 @@ export const InputArea: FC<{
 			},
 			body: JSON.stringify(values),
 		})
-			.then(() => {
+			.then(async (response) => {
 				setValue("title", "");
-				setSubmitFlg(!submitFlg);
-				toast({
-					title: "Success",
-					description: "追加に成功しました。",
-					status: "success",
-					isClosable: true,
-				});
+				const { message } = await response.json();
+				if (message === "OK") {
+					setSubmitFlg(!submitFlg);
+					toast({
+						title: "Success",
+						description: "追加に成功しました。",
+						status: "success",
+						isClosable: true,
+					});
+				} else {
+					toast({
+						title: "エラー",
+						description: "使用できない単語が含まれてます。",
+						status: "error",
+						isClosable: true,
+					});
+				}
 			})
 			.catch((e) => console.error(e));
 	}

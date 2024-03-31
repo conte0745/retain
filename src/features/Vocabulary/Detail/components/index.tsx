@@ -58,17 +58,26 @@ export const ModalArea: FC<{
 			},
 			body: JSON.stringify(values),
 		})
-			.then((response) => {
+			.then(async (response) => {
 				if (response.ok) {
-					setSubmitFlg(!submitFlg);
-					onClose();
-					response.json();
-					toast({
-						title: "Success",
-						description: "更新に成功しました。",
-						status: "success",
-						isClosable: true,
-					});
+					const { message } = await response.json();
+					if (message === "OK") {
+						toast({
+							title: "Success",
+							description: "更新に成功しました。",
+							status: "success",
+							isClosable: true,
+						});
+						onClose();
+						setSubmitFlg(!submitFlg);
+					} else {
+						toast({
+							title: "エラー",
+							description: "使用できない単語が含まれています。",
+							status: "error",
+							isClosable: true,
+						});
+					}
 				}
 			})
 			.catch((e) => console.error(e));
@@ -85,7 +94,6 @@ export const ModalArea: FC<{
 				if (response.ok) {
 					setSubmitFlg(!submitFlg);
 					onClose();
-					response.json();
 					toast({
 						title: "Success",
 						description: "削除に成功しました。",
@@ -100,6 +108,7 @@ export const ModalArea: FC<{
 	useEffect(() => {
 		if (isOpen) {
 			setValue("title", detailVocabulary?.title ?? "");
+			setValue("description", detailVocabulary?.description ?? "");
 			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
 			setDelValue(
 				"vocabulary_id",

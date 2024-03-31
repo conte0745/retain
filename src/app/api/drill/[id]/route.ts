@@ -25,7 +25,7 @@ export async function GET(_: NextRequest, { params }: { params: Params }) {
 				question_deleted_at: null,
 			},
 			include: {
-				answers: true,
+				Answer: true,
 			},
 		});
 
