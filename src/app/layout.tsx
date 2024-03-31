@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 		description: "記憶を保持するチューターとして、記憶の定着をサポートします。",
 		images: ["icon.jpg"],
 	},
-	metadataBase: new URL(process.env.NEXT_PUBLIC_VERCEL_URL || "localhost:3000"),
 };
 
 export default function RootLayout({
