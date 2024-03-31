@@ -1,73 +1,71 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  // Uses connection pooling
-  url = env("POSTGRES_PRISMA_URL")
-  // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
-  // or you'll have dangling databases from migrations
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-enum Role  {
-  USER
-  ADMIN
+model Answer {
+  answer_id                 Int       @id @default(autoincrement())
+  question_id               Int
+  answer_content            String
+  answer_is_correct_content Boolean   @default(false)
+  answer_public_flag        Boolean   @default(false)
+  answer_created_at         DateTime  @default(now())
+  answer_updated_at         DateTime?
+  answer_deleted_flag       Boolean   @default(false)
+  answer_deleted_at         DateTime?
+  Question                  Question  @relation(fields: [question_id], references: [question_id])
+
+  @@index([question_id])
 }
+
+model AnswerResult {
+  answer_result_id          Int        @id @default(autoincrement())
+  answer_result_question_id Int
+  answer_result_user_uuid   String?
+  answer_result_is_correct  Boolean?
+  Question                  Question[]
+}
+
+model Question {
+  question_id                       Int            @id @default(autoincrement())
+  question_title                    String
+  question_content                  String         @default("作成中...")
+  question_explanation              String         @default("作成中...")
+  question_correct_rate             Int?
+  question_count_incorrect_question Int            @default(0)
+  question_public_flag              Boolean        @default(false)
+  question_created_at               DateTime       @default(now())
+  question_updated_at               DateTime?
+  question_deleted_at               DateTime?
+  Answer                            Answer[]
+  AnswerResult                      AnswerResult[]
+}
+
 model User {
-  user_id        Int      @id @default(autoincrement())
-  user_name      String
-  user_email     String   @unique
-  user_role      Role     @default(USER)
-  user_created_at DateTime @default(now())
-  user_updated_at DateTime @updatedAt
+  user_id         Int       @id @default(autoincrement())
+  user_name       String
+  user_email      String    @unique
+  user_role       Role      @default(USER)
+  user_created_at DateTime  @default(now())
+  user_updated_at DateTime
   user_deleted_at DateTime?
 }
 
 model Vocabulary {
-  todo_id Int @id @default(autoincrement())
-  content String
-  description String?
-  created_at DateTime @default(now())
-  updated_at DateTime?
-  deleted_at DateTime?
-}
-model Question {
-  question_id Int @id @default(autoincrement())
-  question_title String
-  question_content String @default("作成中...")
-  question_explanation String @default("作成中...")
-  question_correct_rate Int?
-  question_count_incorrect_question Int @default(0)
-  question_public_flag Boolean @default(false)
-  question_created_at DateTime @default(now())
-  question_updated_at DateTime?
-  question_deleted_at DateTime?
-  answers Answer[]
-  result AnswerResult[]
+  vocabulary_id Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime?
+  deleted_at    DateTime?
 }
 
-model Answer {
-  answer_id Int @id @default(autoincrement())
-  question Question @relation(fields: [question_id], references: [question_id])
-  question_id Int
-  answer_content String
-  answer_is_correct_content Boolean @default(false)
-  answer_public_flag Boolean @default(false)
-  answer_created_at DateTime @default(now())
-  answer_updated_at DateTime?
-  answer_deleted_flag Boolean @default(false)
-  answer_deleted_at DateTime?
-  @@index([question_id])
-}
-model AnswerResult {
-  answer_result_id Int @id @default(autoincrement())
-  answer_result_question_id Int
-  answer_result_user_uuid String?
-  answer_result_is_correct Boolean?
-  questions Question[]
+enum Role {
+  USER
+  ADMIN
 }

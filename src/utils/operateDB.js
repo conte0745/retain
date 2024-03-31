@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient({ log: ["query"] });
 try {
-	const result = await prisma.todo.findMany();
+	const result = await prisma.vocabulary.findMany();
 	console.log(result);
 } catch (e) {
 	console.error(e);

@@ -47,7 +47,7 @@ export const ModalArea: FC<{
 	} = useForm<Vocabulary>();
 
 	async function onUpdateSubmit(values: Vocabulary) {
-		if (values.content === "") {
+		if (values.title === "") {
 			return;
 		}
 
@@ -99,7 +99,7 @@ export const ModalArea: FC<{
 
 	useEffect(() => {
 		if (isOpen) {
-			setValue("content", detailVocabulary?.content ?? "");
+			setValue("title", detailVocabulary?.title ?? "");
 			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
 			setDelValue(
 				"vocabulary_id",
@@ -123,12 +123,12 @@ export const ModalArea: FC<{
 					<ModalCloseButton />
 					<ModalBody pb={6}>
 						<form onSubmit={handleSubmit(onUpdateSubmit)} id="update">
-							<FormControl isInvalid={errors.content && true}>
-								<FormLabel htmlFor="update_content">内容</FormLabel>
+							<FormControl isInvalid={errors.title && true}>
+								<FormLabel htmlFor="update_title">用語</FormLabel>
 								<Input
-									defaultValue={detailVocabulary?.content}
-									id="update_content"
-									{...register("content", {
+									defaultValue={detailVocabulary?.title}
+									id="update_title"
+									{...register("title", {
 										required: "必須項目です。",
 										maxLength: {
 											value: 190,
@@ -136,14 +136,32 @@ export const ModalArea: FC<{
 										},
 									})}
 								/>
+								<FormErrorMessage>
+									{errors.title && errors.title.message}
+								</FormErrorMessage>
+								<br />
+								<br />
+								<FormLabel htmlFor="update_description">説明</FormLabel>
+								<Input
+									defaultValue={detailVocabulary?.description ?? ""}
+									id="update_description"
+									{...register("description", {
+										maxLength: {
+											value: 190,
+											message: "190文字までの入力です。",
+										},
+									})}
+								/>
+								<FormErrorMessage>
+									{errors.description && errors.description.message}
+								</FormErrorMessage>
+								<br />
+								<br />
 								<Input
 									type="hidden"
 									defaultValue={detailVocabulary?.vocabulary_id}
 									{...register("vocabulary_id")}
 								/>
-								<FormErrorMessage>
-									{errors.content && errors.content.message}
-								</FormErrorMessage>
 
 								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
 									"ja-JP",

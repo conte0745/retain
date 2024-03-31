@@ -19,12 +19,12 @@ export const Show: FC<{
 	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary | undefined>>;
 }> = ({ submitFlg, onOpen, setDetailVocabulary }) => {
 	const { colorMode } = useColorMode();
-	const [vocabularies, setVocabularys] = useState<Vocabulary[]>([]);
+	const [vocabularies, setVocabularies] = useState<Vocabulary[]>([]);
 	const [onLoading, setOnLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		setOnLoading(true);
-		const getVocabularys = async () => {
+		const getVocabularies = async () => {
 			const response: Vocabulary[] = await fetch(`/api/vocabulary`)
 				.then((response) => response.json())
 				.catch((e) => {
@@ -38,9 +38,9 @@ export const Show: FC<{
 				e.created_at = new Date(e.created_at);
 				e.updated_at = e.updated_at ? new Date(e.updated_at) : null;
 			});
-			setVocabularys(response);
+			setVocabularies(response);
 		};
-		getVocabularys();
+		getVocabularies();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [submitFlg]);
 
@@ -75,7 +75,7 @@ export const Show: FC<{
 										}}
 									>
 										<Td>{!vocabulary.deleted_at && idx++}</Td>
-										<Td wordBreak={"break-word"}>{vocabulary.content}</Td>
+										<Td wordBreak={"break-word"}>{vocabulary.title}</Td>
 										<Td>
 											<Button
 												size={"xs"}

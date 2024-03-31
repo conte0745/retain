@@ -15,7 +15,7 @@ export async function POST(
 	request: NextRequest,
 	{ params }: { params: Params }
 ) {
-	const { content } = await request.json();
+	const { title, description } = await request.json();
 
 	try {
 		const targetId: number = Number(params.id);
@@ -25,7 +25,8 @@ export async function POST(
 				vocabulary_id: targetId,
 			},
 			data: {
-				content: content,
+				title: title,
+				description: description,
 				updated_at: getNow(),
 			},
 		});

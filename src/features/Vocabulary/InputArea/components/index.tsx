@@ -24,7 +24,7 @@ export const InputArea: FC<{
 	const toast = useToast();
 
 	async function onSubmit(values: Vocabulary) {
-		if (values.content === "") {
+		if (values.title === "") {
 			return;
 		}
 		await fetch(`api/vocabulary`, {
@@ -35,7 +35,7 @@ export const InputArea: FC<{
 			body: JSON.stringify(values),
 		})
 			.then(() => {
-				setValue("content", "");
+				setValue("title", "");
 				setSubmitFlg(!submitFlg);
 				toast({
 					title: "Success",
@@ -49,12 +49,12 @@ export const InputArea: FC<{
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<FormControl isInvalid={errors.content && true}>
-				<FormLabel htmlFor="content"></FormLabel>
+			<FormControl isInvalid={errors.title && true}>
+				<FormLabel htmlFor="title"></FormLabel>
 				<HStack>
 					<Input
-						id="content"
-						{...register("content", {
+						id="title"
+						{...register("title", {
 							required: "必須項目です。",
 							maxLength: { value: 190, message: "190文字までの入力です。" },
 						})}
@@ -70,7 +70,7 @@ export const InputArea: FC<{
 					</Button>
 				</HStack>
 				<FormErrorMessage className="error">
-					{errors.content && errors.content.message}
+					{errors.title && errors.title.message}
 				</FormErrorMessage>
 			</FormControl>
 		</form>

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Vocabulary } from "@prisma/client";
 
-const Vocabularys = () => {
+const Vocabularies = () => {
 	const [submitFlg, setSubmitFlg] = useState<boolean>(true);
 	const [detailVocabulary, setDetailVocabulary] = useState<
 		Vocabulary | undefined
@@ -34,4 +34,4 @@ const Vocabularys = () => {
 	);
 };
 
-export default Vocabularys;
+export default Vocabularies;

@@ -19,12 +19,12 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-	const { content } = await request.json();
+	const { title } = await request.json();
 	try {
 		await prisma.$connect();
 		await prisma.vocabulary.create({
 			data: {
-				content: content,
+				title: title,
 				created_at: getNow(),
 				updated_at: null,
 				deleted_at: null,

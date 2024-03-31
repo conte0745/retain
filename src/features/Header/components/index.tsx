@@ -28,7 +28,7 @@ export const Header = () => {
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<HStack
-			bg={colorMode === "light" ? "gray.100" : "gray.700"}
+			bg={colorMode === "light" ? "gray.100" : "gray.900"}
 			data-testid="header"
 		>
 			<Box>
