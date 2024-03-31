@@ -70,6 +70,7 @@ export const SignIn = () => {
 	return (
 		<>
 			<Heading>サインイン</Heading>
+			<br />
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<FormControl isInvalid={errors.email && true}>
 					<FormLabel htmlFor="email">E-MAIL</FormLabel>
@@ -84,7 +85,7 @@ export const SignIn = () => {
 						{errors.email && errors.email.message}
 					</FormErrorMessage>
 				</FormControl>
-
+				<br />
 				<FormControl isInvalid={errors.password && true}>
 					<FormLabel htmlFor="password">PASSWORD</FormLabel>
 					<Input

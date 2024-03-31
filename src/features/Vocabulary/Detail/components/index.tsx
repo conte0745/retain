@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import { Todo } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 import {
 	Button,
 	Modal,
@@ -25,8 +25,8 @@ export const ModalArea: FC<{
 	onClose: () => void;
 	submitFlg: boolean;
 	setSubmitFlg: Dispatch<SetStateAction<boolean>>;
-	detailTodo: Todo | undefined;
-}> = ({ isOpen, onClose, submitFlg, setSubmitFlg, detailTodo }) => {
+	detailVocabulary: Vocabulary | undefined;
+}> = ({ isOpen, onClose, submitFlg, setSubmitFlg, detailVocabulary }) => {
 	const initialRef = useRef(null);
 	const finalRef = useRef(null);
 	const toast = useToast();
@@ -37,45 +37,54 @@ export const ModalArea: FC<{
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>();
 
 	const {
 		handleSubmit: handleDelSubmit,
 		register: delRegister,
 		setValue: setDelValue,
 		formState: { isSubmitting: isDelSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>();
 
-	async function onUpdateSubmit(values: Todo) {
-		if (values.content === "") {
+	async function onUpdateSubmit(values: Vocabulary) {
+		if (values.title === "") {
 			return;
 		}
 
-		await fetch(`/api/todo/update/${values.todo_id}`, {
+		await fetch(`/api/vocabulary/update/${values.vocabulary_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
 			},
 			body: JSON.stringify(values),
 		})
-			.then((response) => {
+			.then(async (response) => {
 				if (response.ok) {
-					setSubmitFlg(!submitFlg);
-					onClose();
-					response.json();
-					toast({
-						title: "Success",
-						description: "更新に成功しました。",
-						status: "success",
-						isClosable: true,
-					});
+					const { message } = await response.json();
+					if (message === "OK") {
+						toast({
+							title: "Success",
+							description: "更新に成功しました。",
+							status: "success",
+							isClosable: true,
+						});
+						onClose();
+						setSubmitFlg(!submitFlg);
+					} else {
+						toast({
+							title: "エラー",
+							description: "使用できない単語が含まれています。",
+							status: "error",
+							isClosable: true,
+						});
+					}
 				}
 			})
 			.catch((e) => console.error(e));
 	}
 
-	async function onDeleteSubmit(values: Todo) {
-		await fetch(`todo/delete/${values.todo_id}`, {
+	async function onDeleteSubmit(values: Vocabulary) {
+		await fetch(`api/vocabulary/delete/${values.vocabulary_id}`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
@@ -85,7 +94,6 @@ export const ModalArea: FC<{
 				if (response.ok) {
 					setSubmitFlg(!submitFlg);
 					onClose();
-					response.json();
 					toast({
 						title: "Success",
 						description: "削除に成功しました。",
@@ -99,12 +107,16 @@ export const ModalArea: FC<{
 
 	useEffect(() => {
 		if (isOpen) {
-			setValue("content", detailTodo?.content ?? "");
-			setValue("todo_id", Number(detailTodo?.todo_id) ?? "");
-			setDelValue("todo_id", Number(detailTodo?.todo_id) ?? "");
+			setValue("title", detailVocabulary?.title ?? "");
+			setValue("description", detailVocabulary?.description ?? "");
+			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
+			setDelValue(
+				"vocabulary_id",
+				Number(detailVocabulary?.vocabulary_id) ?? ""
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [detailTodo?.todo_id]);
+	}, [detailVocabulary?.vocabulary_id]);
 
 	return (
 		<>
@@ -116,16 +128,16 @@ export const ModalArea: FC<{
 			>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Todo</ModalHeader>
+					<ModalHeader>Vocabulary</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody pb={6}>
 						<form onSubmit={handleSubmit(onUpdateSubmit)} id="update">
-							<FormControl isInvalid={errors.content && true}>
-								<FormLabel htmlFor="update_content">内容</FormLabel>
+							<FormControl isInvalid={errors.title && true}>
+								<FormLabel htmlFor="update_title">用語</FormLabel>
 								<Input
-									defaultValue={detailTodo?.content}
-									id="update_content"
-									{...register("content", {
+									defaultValue={detailVocabulary?.title}
+									id="update_title"
+									{...register("title", {
 										required: "必須項目です。",
 										maxLength: {
 											value: 190,
@@ -133,24 +145,42 @@ export const ModalArea: FC<{
 										},
 									})}
 								/>
+								<FormErrorMessage>
+									{errors.title && errors.title.message}
+								</FormErrorMessage>
+								<br />
+								<br />
+								<FormLabel htmlFor="update_description">説明</FormLabel>
 								<Input
-									type="hidden"
-									defaultValue={detailTodo?.todo_id}
-									{...register("todo_id")}
+									defaultValue={detailVocabulary?.description ?? ""}
+									id="update_description"
+									{...register("description", {
+										maxLength: {
+											value: 190,
+											message: "190文字までの入力です。",
+										},
+									})}
 								/>
 								<FormErrorMessage>
-									{errors.content && errors.content.message}
+									{errors.description && errors.description.message}
 								</FormErrorMessage>
+								<br />
+								<br />
+								<Input
+									type="hidden"
+									defaultValue={detailVocabulary?.vocabulary_id}
+									{...register("vocabulary_id")}
+								/>
 
-								<Badge>{`作成日：${detailTodo?.created_at.toLocaleString(
+								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
 									"ja-JP",
 									options
 								)}`}</Badge>
 								<br />
-								{!detailTodo?.updated_at ? (
+								{!detailVocabulary?.updated_at ? (
 									""
 								) : (
-									<Badge>{`更新日：${detailTodo?.updated_at.toLocaleString(
+									<Badge>{`更新日：${detailVocabulary?.updated_at.toLocaleString(
 										"ja-JP",
 										options
 									)}`}</Badge>
@@ -161,8 +191,8 @@ export const ModalArea: FC<{
 					<form onSubmit={handleDelSubmit(onDeleteSubmit)} id="delete">
 						<Input
 							type="hidden"
-							defaultValue={detailTodo?.todo_id}
-							{...delRegister("todo_id")}
+							defaultValue={detailVocabulary?.vocabulary_id}
+							{...delRegister("vocabulary_id")}
 						/>
 					</form>
 					<ModalFooter>

@@ -11,10 +11,16 @@ export default defineConfig({
 			"@App": resolve(__dirname, "./src/features/App/"),
 			"@Auth": resolve(__dirname, "./src/features/Authentication/"),
 			"@Top": resolve(__dirname, "./src/features/Top/"),
-			"@Todo": resolve(__dirname, "./src/features/Todo/"),
-			"@TodoShow": resolve(__dirname, "./src/features/Todo/Show/"),
-			"@TodoCreate": resolve(__dirname, "./src/features/Todo/InputArea/"),
-			"@TodoDetail": resolve(__dirname, "./src/features/Todo/Detail/"),
+			"@Vocabulary": resolve(__dirname, "./src/features/Vocabulary/"),
+			"@VocabularyShow": resolve(__dirname, "./src/features/Vocabulary/Show/"),
+			"@VocabularyCreate": resolve(
+				__dirname,
+				"./src/features/Vocabulary/InputArea/"
+			),
+			"@VocabularyDetail": resolve(
+				__dirname,
+				"./src/features/Vocabulary/Detail/"
+			),
 			"@Question": resolve(__dirname, "./src/features/Question/"),
 			"@QuestionShow": resolve(__dirname, "./src/features/Question/Show/"),
 			"@QuestionCreate": resolve(

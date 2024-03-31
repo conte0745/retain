@@ -1,14 +1,16 @@
 "use client";
-import { InputArea } from "@/features/Todo/InputArea/components";
-import { Show } from "@/features/Todo/Show/components";
-import { ModalArea } from "@/features/Todo/Detail/components";
+import { InputArea } from "@/features/Vocabulary/InputArea/components";
+import { Show } from "@/features/Vocabulary/Show/components";
+import { ModalArea } from "@/features/Vocabulary/Detail/components";
 import { useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
-import { Todo } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 
-const Todos = () => {
+const Vocabularies = () => {
 	const [submitFlg, setSubmitFlg] = useState<boolean>(true);
-	const [detailTodo, setDetailTodo] = useState<Todo | undefined>();
+	const [detailVocabulary, setDetailVocabulary] = useState<
+		Vocabulary | undefined
+	>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -18,7 +20,7 @@ const Todos = () => {
 			<Show
 				submitFlg={submitFlg}
 				onOpen={onOpen}
-				setDetailTodo={setDetailTodo}
+				setDetailVocabulary={setDetailVocabulary}
 			></Show>
 
 			<ModalArea
@@ -26,10 +28,10 @@ const Todos = () => {
 				onClose={onClose}
 				submitFlg={submitFlg}
 				setSubmitFlg={setSubmitFlg}
-				detailTodo={detailTodo}
+				detailVocabulary={detailVocabulary}
 			></ModalArea>
 		</>
 	);
 };
 
-export default Todos;
+export default Vocabularies;

@@ -9,7 +9,7 @@ import {
 	HStack,
 	useToast,
 } from "@chakra-ui/react";
-import { Todo } from "@prisma/client";
+import { Vocabulary } from "@prisma/client";
 
 export const InputArea: FC<{
 	submitFlg: boolean;
@@ -20,41 +20,51 @@ export const InputArea: FC<{
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Todo>();
+	} = useForm<Vocabulary>({ reValidateMode: "onSubmit" });
 	const toast = useToast();
 
-	async function onSubmit(values: Todo) {
-		if (values.content === "") {
+	async function onSubmit(values: Vocabulary) {
+		if (values.title === "") {
 			return;
 		}
-		await fetch(`api/todo`, {
+		await fetch(`api/vocabulary`, {
 			method: "post",
 			headers: {
 				// "Content-Type": "application/json",
 			},
 			body: JSON.stringify(values),
 		})
-			.then(() => {
-				setValue("content", "");
-				setSubmitFlg(!submitFlg);
-				toast({
-					title: "Success",
-					description: "追加に成功しました。",
-					status: "success",
-					isClosable: true,
-				});
+			.then(async (response) => {
+				setValue("title", "");
+				const { message } = await response.json();
+				if (message === "OK") {
+					setSubmitFlg(!submitFlg);
+					toast({
+						title: "Success",
+						description: "追加に成功しました。",
+						status: "success",
+						isClosable: true,
+					});
+				} else {
+					toast({
+						title: "エラー",
+						description: "使用できない単語が含まれてます。",
+						status: "error",
+						isClosable: true,
+					});
+				}
 			})
 			.catch((e) => console.error(e));
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<FormControl isInvalid={errors.content && true}>
-				<FormLabel htmlFor="content"></FormLabel>
+			<FormControl isInvalid={errors.title && true}>
+				<FormLabel htmlFor="title"></FormLabel>
 				<HStack>
 					<Input
-						id="content"
-						{...register("content", {
+						id="title"
+						{...register("title", {
 							required: "必須項目です。",
 							maxLength: { value: 190, message: "190文字までの入力です。" },
 						})}
@@ -64,12 +74,13 @@ export const InputArea: FC<{
 						colorScheme="teal"
 						isLoading={isSubmitting}
 						type="submit"
+						className="vocabulary-submit"
 					>
 						追加
 					</Button>
 				</HStack>
-				<FormErrorMessage>
-					{errors.content && errors.content.message}
+				<FormErrorMessage className="error">
+					{errors.title && errors.title.message}
 				</FormErrorMessage>
 			</FormControl>
 		</form>

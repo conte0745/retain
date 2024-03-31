@@ -1,12 +1,21 @@
 "use client";
 
 import { FC } from "react";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+	Table,
+	Tbody,
+	Td,
+	Th,
+	Thead,
+	Tr,
+	useColorMode,
+} from "@chakra-ui/react";
 import { Loading } from "@/features/Drill/components/loading";
 import { useFetchDrill } from "@/features/Drill/Show/hooks/useFetchDrill";
 import Link from "next/link";
 
 export const Show: FC = () => {
+	const { colorMode } = useColorMode();
 	const { questions, isLoading, isError } = useFetchDrill();
 
 	if (isError) {
@@ -17,7 +26,7 @@ export const Show: FC = () => {
 	return (
 		<>
 			<Table m={"0.5rem"} variant={"simple"} width={"100%"}>
-				<Thead bg={"gray.300"}>
+				<Thead bg={colorMode === "light" ? "gray.100" : "gray.700"}>
 					<Tr>
 						<Th>No</Th>
 						<Th>タイトル</Th>
@@ -32,7 +41,10 @@ export const Show: FC = () => {
 						questions.map((question) => (
 							<Tr
 								key={question.question_id}
-								_hover={{ background: "gray.100" }}
+								_hover={{
+									background:
+										colorMode === "light" ? "gray.100" : "blackAlpha.700",
+								}}
 							>
 								<Td>{idx++}</Td>
 								<Td wordBreak={"break-word"}>{question.question_title}</Td>

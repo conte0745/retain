@@ -11,25 +11,20 @@ export async function OPTIONS() {
 	}
 }
 
-export async function GET(_: NextRequest, { params }: { params: Params }) {
-	if (!isNumber(params.id)) {
-		return NextResponse.json({ message: "notFound" }, { headers: options });
-	}
+export async function POST(_: NextRequest, { params }: { params: Params }) {
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		const questions = await prisma.question.findUnique({
+		await prisma.vocabulary.update({
 			where: {
-				question_id: targetId,
-				question_public_flag: true,
-				question_deleted_at: null,
+				vocabulary_id: targetId,
 			},
-			include: {
-				answers: true,
+			data: {
+				deleted_at: getNow(),
 			},
 		});
-
-		return NextResponse.json({ questions }, { headers: options });
+		console.log("del");
+		return NextResponse.json({ status: 200 }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: e }, { status: 500 });
 	} finally {
@@ -37,7 +32,7 @@ export async function GET(_: NextRequest, { params }: { params: Params }) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isNumber(value: any): boolean {
-	return !Number.isNaN(parseInt(value));
+function getNow() {
+	const date = new Date();
+	return date;
 }

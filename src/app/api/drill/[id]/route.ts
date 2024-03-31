@@ -11,19 +11,25 @@ export async function OPTIONS() {
 	}
 }
 
-export async function POST(_: NextRequest, { params }: { params: Params }) {
+export async function GET(_: NextRequest, { params }: { params: Params }) {
+	if (!isNumber(params.id)) {
+		return NextResponse.json({ message: "notFound" }, { headers: options });
+	}
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		await prisma.todo.update({
+		const questions = await prisma.question.findUnique({
 			where: {
-				todo_id: targetId,
+				question_id: targetId,
+				question_public_flag: true,
+				question_deleted_at: null,
 			},
-			data: {
-				deleted_at: getNow(),
+			include: {
+				Answer: true,
 			},
 		});
-		return NextResponse.json({ status: 200 }, { headers: options });
+
+		return NextResponse.json({ questions }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: e }, { status: 500 });
 	} finally {
@@ -31,7 +37,7 @@ export async function POST(_: NextRequest, { params }: { params: Params }) {
 	}
 }
 
-function getNow() {
-	const date = new Date();
-	return date;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isNumber(value: any): boolean {
+	return !Number.isNaN(parseInt(value));
 }
