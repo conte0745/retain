@@ -66,7 +66,7 @@ export const Top = () => {
 						<Text>
 							powered by{" "}
 							<ChakraLink
-								href="https://github.com/conte0745/react-app"
+								href="https://github.com/conte0745/retain"
 								target="blank"
 							>
 								conte0745
