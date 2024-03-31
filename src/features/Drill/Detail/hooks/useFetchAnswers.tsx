@@ -27,7 +27,7 @@ export const useFetchAnswers = (question_id: number) => {
 		};
 	}
 
-	const correctAnswerIndex = data?.questions.answers.findIndex(
+	const correctAnswerIndex = data?.questions.Answer.findIndex(
 		(e) => e.answer_is_correct_content
 	);
 

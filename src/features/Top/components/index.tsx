@@ -40,7 +40,7 @@ export const Top = () => {
 				<CardBody>
 					<List spacing="10">
 						{topName.map((top) => (
-							<ListItem margin={"5px"}>
+							<ListItem key={top.path} margin={"5px"}>
 								<ChakraLink as={Link} href={top.path}>
 									<Heading>
 										<ListIcon as={StarIcon} />
@@ -49,7 +49,7 @@ export const Top = () => {
 								</ChakraLink>
 								<List margin={"10px auto auto 20px"}>
 									{top.labels.map((label) => (
-										<ListItem>
+										<ListItem key={label}>
 											<ListIcon as={CheckIcon} />
 											{label}
 										</ListItem>

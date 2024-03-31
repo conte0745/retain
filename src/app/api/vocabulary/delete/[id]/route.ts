@@ -23,7 +23,7 @@ export async function POST(_: NextRequest, { params }: { params: Params }) {
 				deleted_at: getNow(),
 			},
 		});
-		console.log("del");
+
 		return NextResponse.json({ status: 200 }, { headers: options });
 	} catch (e) {
 		return NextResponse.json({ message: e }, { status: 500 });

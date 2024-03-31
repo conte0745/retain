@@ -35,7 +35,7 @@ export async function POST(
 				question_updated_at: getNow(),
 			},
 		});
-		question.answers.forEach(async (answer) => {
+		question.Answer.forEach(async (answer) => {
 			await prisma.answer.upsert({
 				create: {
 					question_id: targetId,

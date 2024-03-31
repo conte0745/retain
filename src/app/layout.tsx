@@ -5,12 +5,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import React from "react";
 
-interface CustomMetadata extends Metadata {
-	metadataBase?: URL | null | undefined;
-}
-
 // eslint-disable-next-line react-refresh/only-export-components
-export const metadata: CustomMetadata = {
+export const metadata: Metadata = {
+	metadataBase: new URL("https://react-app-psi-henna.vercel.app/"),
 	title: "RetainTutor",
 	description: "記憶を保持するチューターとして、記憶の定着をサポートします。",
 	openGraph: {
@@ -18,9 +15,6 @@ export const metadata: CustomMetadata = {
 		description: "記憶を保持するチューターとして、記憶の定着をサポートします。",
 		images: ["icon.jpg"],
 	},
-	metadataBase: new URL(
-		process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
-	),
 };
 
 export default function RootLayout({

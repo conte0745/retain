@@ -91,8 +91,8 @@ export const DetailDrill = () => {
 								</Box>
 								<br />
 								<Box borderWidth={"1px"} borderRadius={"md"} padding={"0.5rem"}>
-									{question.answers &&
-										question.answers.map((item, index) => (
+									{question.Answer &&
+										question.Answer.map((item, index) => (
 											<ChoiceAnswer
 												key={item.answer_id}
 												answer={item}
