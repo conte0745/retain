@@ -34,22 +34,29 @@ export const Top = () => {
 		<>
 			<Card margin={"5rem auto auto auto"}>
 				<CardHeader>
-					<Heading>トップページ</Heading>
+					<Heading id="top-page-title">トップページ</Heading>
 				</CardHeader>
 				<Divider />
 				<CardBody>
 					<List spacing="10">
 						{topName.map((top) => (
-							<ListItem key={top.path} margin={"5px"}>
+							<ListItem
+								className="top-page-link-list-item"
+								key={top.path}
+								margin={"5px"}
+							>
 								<ChakraLink as={Link} href={top.path}>
-									<Heading>
+									<Heading className="top-page-link">
 										<ListIcon as={StarIcon} />
 										{top.head}
 									</Heading>
 								</ChakraLink>
 								<List margin={"10px auto auto 20px"}>
 									{top.labels.map((label) => (
-										<ListItem key={label}>
+										<ListItem
+											className="top-page-link-list-label-item"
+											key={label}
+										>
 											<ListIcon as={CheckIcon} />
 											{label}
 										</ListItem>
@@ -63,9 +70,10 @@ export const Top = () => {
 				<CardFooter>
 					<HStack>
 						<Spacer />
-						<Text>
+						<Text id="powered-by-author">
 							powered by{" "}
 							<ChakraLink
+								id="powered-by-author-link"
 								href="https://github.com/conte0745/retain"
 								target="blank"
 							>
