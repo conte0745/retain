@@ -48,7 +48,7 @@ export const InputArea: FC<{
 				} else {
 					toast({
 						title: "エラー",
-						description: "使用できない単語が含まれてます。",
+						description: "使用できない単語が含まれています。",
 						status: "error",
 						isClosable: true,
 					});

@@ -7,7 +7,7 @@ import React from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
-	metadataBase: new URL("https://react-app-psi-henna.vercel.app/"),
+	metadataBase: new URL("https://retain-3hx1bzly7-concon.vercel.app/"),
 	title: "RetainTutor",
 	description: "記憶を保持するチューターとして、記憶の定着をサポートします。",
 	openGraph: {

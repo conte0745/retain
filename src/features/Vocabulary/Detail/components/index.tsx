@@ -1,6 +1,13 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { Vocabulary } from "@prisma/client";
 import {
 	Button,
@@ -17,6 +24,7 @@ import {
 	Badge,
 	FormErrorMessage,
 	useToast,
+	Textarea,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
@@ -31,6 +39,7 @@ export const ModalArea: FC<{
 	const finalRef = useRef(null);
 	const toast = useToast();
 	const options = { timeZone: "Asia/Tokyo" };
+	const [isHidden, setIsHidden] = useState<boolean>(true);
 
 	const {
 		handleSubmit,
@@ -108,15 +117,17 @@ export const ModalArea: FC<{
 	useEffect(() => {
 		if (isOpen) {
 			setValue("title", detailVocabulary?.title ?? "");
-			setValue("description", detailVocabulary?.description ?? "");
+			setValue("description", "内緒");
 			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
 			setDelValue(
 				"vocabulary_id",
 				Number(detailVocabulary?.vocabulary_id) ?? ""
 			);
+		} else {
+			setIsHidden(true);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [detailVocabulary?.vocabulary_id]);
+	}, [isOpen]);
 
 	return (
 		<>
@@ -150,9 +161,25 @@ export const ModalArea: FC<{
 								</FormErrorMessage>
 								<br />
 								<br />
+								<Button
+									onClick={() => {
+										setIsHidden(!isHidden);
+										setValue(
+											"description",
+											isHidden ? "内緒" : detailVocabulary?.description ?? ""
+										);
+									}}
+								>
+									表示切り替え
+								</Button>
+								<br />
+								<br />
 								<FormLabel htmlFor="update_description">説明</FormLabel>
-								<Input
+
+								<Textarea
 									defaultValue={detailVocabulary?.description ?? ""}
+									size="md"
+									rows={10}
 									id="update_description"
 									{...register("description", {
 										maxLength: {
@@ -161,6 +188,8 @@ export const ModalArea: FC<{
 										},
 									})}
 								/>
+
+								<br />
 								<FormErrorMessage>
 									{errors.description && errors.description.message}
 								</FormErrorMessage>
@@ -171,7 +200,6 @@ export const ModalArea: FC<{
 									defaultValue={detailVocabulary?.vocabulary_id}
 									{...register("vocabulary_id")}
 								/>
-
 								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
 									"ja-JP",
 									options
