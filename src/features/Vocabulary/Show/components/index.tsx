@@ -87,11 +87,17 @@ export const Show: FC<{
 											background:
 												colorMode === "light" ? "gray.100" : "blackAlpha.700",
 										}}
+										className="vocabularies"
 									>
-										<Td>{!vocabulary.deleted_at && idx++}</Td>
-										<Td wordBreak={"break-word"}>{vocabulary.title}</Td>
+										<Td className="vocabularies.index">
+											{!vocabulary.deleted_at && idx++}
+										</Td>
+										<Td className="vocabularies.title" wordBreak={"break-word"}>
+											{vocabulary.title}
+										</Td>
 										<Td>
 											<Button
+												className="vocabularies.editBtn"
 												size={"xs"}
 												onClick={() => onClickEditBtn(vocabulary)}
 												_hover={{ background: "blue.300" }}

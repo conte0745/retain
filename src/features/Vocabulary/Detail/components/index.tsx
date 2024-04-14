@@ -86,6 +86,7 @@ export const ModalArea: FC<ModalAreaProps> = ({
 								created_at: detailVocabulary.created_at,
 								updated_at: new Date(),
 								deleted_at: detailVocabulary.deleted_at,
+								isDisplay: true,
 							};
 
 						return newItems;
@@ -136,6 +137,7 @@ export const ModalArea: FC<ModalAreaProps> = ({
 	};
 
 	const handleToggleDescription = () => {
+		console.log("click", isHidden);
 		setIsHidden(!isHidden);
 		setValue(
 			"description",
@@ -145,12 +147,11 @@ export const ModalArea: FC<ModalAreaProps> = ({
 
 	useEffect(() => {
 		if (isOpen) {
+			setIsHidden(true);
 			setValue("title", detailVocabulary?.title ?? "");
-			setValue("description", "内緒");
 			setValue("vocabulary_id", detailVocabulary.vocabulary_id);
 			setDelValue("vocabulary_id", detailVocabulary.vocabulary_id);
-		} else {
-			setIsHidden(true);
+			setValue("description", "内緒");
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isOpen]);
@@ -194,6 +195,7 @@ export const ModalArea: FC<ModalAreaProps> = ({
 								defaultValue={detailVocabulary?.description ?? ""}
 								size="md"
 								rows={10}
+								isDisabled={isHidden}
 								id="update_description"
 								{...register("description", {
 									maxLength: {
