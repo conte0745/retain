@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { Vocabulary } from "@prisma/client";
 
 export type ExVocabulary = Vocabulary & {
-	isDisplay: boolean;
+	isDisplay?: boolean;
 };
 
 interface IVocabularyContext {
