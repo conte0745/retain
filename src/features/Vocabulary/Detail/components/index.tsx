@@ -1,13 +1,4 @@
-"use client";
-
-import {
-	Dispatch,
-	FC,
-	SetStateAction,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { Dispatch, FC, useEffect, useRef, useState } from "react";
 import { Vocabulary } from "@prisma/client";
 import {
 	Button,
@@ -27,19 +18,26 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { useVocabularies } from "@Vocabulary/VocabularyContext";
 
-export const ModalArea: FC<{
+interface ModalAreaProps {
 	isOpen: boolean;
 	onClose: () => void;
-	submitFlg: boolean;
-	setSubmitFlg: Dispatch<SetStateAction<boolean>>;
-	detailVocabulary: Vocabulary | undefined;
-}> = ({ isOpen, onClose, submitFlg, setSubmitFlg, detailVocabulary }) => {
-	const initialRef = useRef(null);
-	const finalRef = useRef(null);
+	setSubmitId: Dispatch<number | null>;
+	detailVocabulary: Vocabulary;
+}
+
+export const ModalArea: FC<ModalAreaProps> = ({
+	isOpen,
+	onClose,
+	detailVocabulary,
+}) => {
+	const initialRef = useRef<HTMLInputElement>(null);
+	const finalRef = useRef<HTMLInputElement>(null);
 	const toast = useToast();
 	const options = { timeZone: "Asia/Tokyo" };
 	const [isHidden, setIsHidden] = useState<boolean>(true);
+	const { vocabularies, setVocabularies } = useVocabularies();
 
 	const {
 		handleSubmit,
@@ -47,7 +45,6 @@ export const ModalArea: FC<{
 		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm<Vocabulary>();
-
 	const {
 		handleSubmit: handleDelSubmit,
 		register: delRegister,
@@ -55,74 +52,103 @@ export const ModalArea: FC<{
 		formState: { isSubmitting: isDelSubmitting },
 	} = useForm<Vocabulary>();
 
-	async function onUpdateSubmit(values: Vocabulary) {
-		if (values.title === "") {
-			return;
-		}
+	const onUpdateSubmit = async (values: Vocabulary) => {
+		if (values.title === "") return;
 
-		await fetch(`/api/vocabulary/update/${values.vocabulary_id}`, {
-			method: "post",
-			headers: {
-				// "Content-Type": "application/json",
-			},
-			body: JSON.stringify(values),
-		})
-			.then(async (response) => {
-				if (response.ok) {
-					const { message } = await response.json();
-					if (message === "OK") {
-						toast({
-							title: "Success",
-							description: "更新に成功しました。",
-							status: "success",
-							isClosable: true,
-						});
-						onClose();
-						setSubmitFlg(!submitFlg);
-					} else {
-						toast({
-							title: "エラー",
-							description: "使用できない単語が含まれています。",
-							status: "error",
-							isClosable: true,
-						});
-					}
+		try {
+			const response = await fetch(
+				`/api/vocabulary/update/${values.vocabulary_id}`,
+				{
+					method: "post",
+					body: JSON.stringify(values),
 				}
-			})
-			.catch((e) => console.error(e));
-	}
+			);
 
-	async function onDeleteSubmit(values: Vocabulary) {
-		await fetch(`api/vocabulary/delete/${values.vocabulary_id}`, {
-			method: "post",
-			headers: {
-				// "Content-Type": "application/json",
-			},
-		})
-			.then((response) => {
-				if (response.ok) {
-					setSubmitFlg(!submitFlg);
-					onClose();
+			if (response.ok) {
+				const { message } = await response.json();
+				if (message === "OK") {
 					toast({
 						title: "Success",
-						description: "削除に成功しました。",
-						status: "warning",
+						description: "更新に成功しました。",
+						status: "success",
+						isClosable: true,
+					});
+					setVocabularies((prevItems) => {
+						const newItems = prevItems ? [...prevItems] : [];
+						const index = vocabularies?.findIndex(
+							(v) => v.vocabulary_id === values.vocabulary_id
+						);
+						if (index !== undefined && index >= 0)
+							newItems[index] = {
+								vocabulary_id: detailVocabulary.vocabulary_id,
+								title: values.title,
+								description: values.description,
+								created_at: detailVocabulary.created_at,
+								updated_at: new Date(),
+								deleted_at: detailVocabulary.deleted_at,
+							};
+
+						return newItems;
+					});
+					onClose();
+				} else {
+					toast({
+						title: "エラー",
+						description: "使用できない単語が含まれています。",
+						status: "error",
 						isClosable: true,
 					});
 				}
-			})
-			.catch((e) => console.error(e));
-	}
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const onDeleteSubmit = async (values: Vocabulary) => {
+		try {
+			const response = await fetch(
+				`api/vocabulary/delete/${values.vocabulary_id}`,
+				{
+					method: "post",
+				}
+			);
+
+			if (response.ok) {
+				toast({
+					title: "Success",
+					description: "削除に成功しました。",
+					status: "warning",
+					isClosable: true,
+				});
+				setVocabularies((prevItems) => {
+					if (prevItems !== null) {
+						return prevItems.filter(
+							(v) => v.vocabulary_id !== detailVocabulary.vocabulary_id
+						);
+					} else return [];
+				});
+				onClose();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const handleToggleDescription = () => {
+		setIsHidden(!isHidden);
+		setValue(
+			"description",
+			isHidden ? "内緒" : detailVocabulary.description ?? "未作成"
+		);
+	};
 
 	useEffect(() => {
 		if (isOpen) {
 			setValue("title", detailVocabulary?.title ?? "");
 			setValue("description", "内緒");
-			setValue("vocabulary_id", Number(detailVocabulary?.vocabulary_id) ?? "");
-			setDelValue(
-				"vocabulary_id",
-				Number(detailVocabulary?.vocabulary_id) ?? ""
-			);
+			setValue("vocabulary_id", detailVocabulary.vocabulary_id);
+			setDelValue("vocabulary_id", detailVocabulary.vocabulary_id);
 		} else {
 			setIsHidden(true);
 		}
@@ -130,121 +156,106 @@ export const ModalArea: FC<{
 	}, [isOpen]);
 
 	return (
-		<>
-			<Modal
-				initialFocusRef={initialRef}
-				finalFocusRef={finalRef}
-				isOpen={isOpen}
-				onClose={onClose}
-			>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader>Vocabulary</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<form onSubmit={handleSubmit(onUpdateSubmit)} id="update">
-							<FormControl isInvalid={errors.title && true}>
-								<FormLabel htmlFor="update_title">用語</FormLabel>
-								<Input
-									defaultValue={detailVocabulary?.title}
-									id="update_title"
-									{...register("title", {
-										required: "必須項目です。",
-										maxLength: {
-											value: 190,
-											message: "190文字までの入力です。",
-										},
-									})}
-								/>
-								<FormErrorMessage>
-									{errors.title && errors.title.message}
-								</FormErrorMessage>
-								<br />
-								<br />
-								<Button
-									onClick={() => {
-										setIsHidden(!isHidden);
-										setValue(
-											"description",
-											isHidden ? "内緒" : detailVocabulary?.description ?? ""
-										);
-									}}
-								>
-									表示切り替え
-								</Button>
-								<br />
-								<br />
-								<FormLabel htmlFor="update_description">説明</FormLabel>
-
-								<Textarea
-									defaultValue={detailVocabulary?.description ?? ""}
-									size="md"
-									rows={10}
-									id="update_description"
-									{...register("description", {
-										maxLength: {
-											value: 190,
-											message: "190文字までの入力です。",
-										},
-									})}
-								/>
-
-								<br />
-								<FormErrorMessage>
-									{errors.description && errors.description.message}
-								</FormErrorMessage>
-								<br />
-								<br />
-								<Input
-									type="hidden"
-									defaultValue={detailVocabulary?.vocabulary_id}
-									{...register("vocabulary_id")}
-								/>
+		<Modal
+			initialFocusRef={initialRef}
+			finalFocusRef={finalRef}
+			isOpen={isOpen}
+			onClose={onClose}
+		>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalHeader>Vocabulary</ModalHeader>
+				<ModalCloseButton />
+				<ModalBody pb={6}>
+					<form onSubmit={handleSubmit(onUpdateSubmit)} id="update">
+						<FormControl isInvalid={errors.title && true}>
+							<FormLabel htmlFor="update_title">用語</FormLabel>
+							<Input
+								defaultValue={detailVocabulary?.title}
+								id="update_title"
+								{...register("title", {
+									required: "必須項目です。",
+									maxLength: {
+										value: 190,
+										message: "190文字までの入力です。",
+									},
+								})}
+							/>
+							<FormErrorMessage>
+								{errors.title && errors.title.message}
+							</FormErrorMessage>
+							<br />
+							<br />
+							<Button onClick={handleToggleDescription}>表示切り替え</Button>
+							<br />
+							<br />
+							<FormLabel htmlFor="update_description">説明</FormLabel>
+							<Textarea
+								defaultValue={detailVocabulary?.description ?? ""}
+								size="md"
+								rows={10}
+								id="update_description"
+								{...register("description", {
+									maxLength: {
+										value: 190,
+										message: "190文字までの入力です。",
+									},
+								})}
+							/>
+							<FormErrorMessage>
+								{errors.description && errors.description.message}
+							</FormErrorMessage>
+							<br />
+							<br />
+							<Input
+								type="hidden"
+								defaultValue={detailVocabulary.vocabulary_id}
+								{...register("vocabulary_id")}
+							/>
+							{detailVocabulary?.created_at && (
 								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
 									"ja-JP",
 									options
 								)}`}</Badge>
-								<br />
-								{!detailVocabulary?.updated_at ? (
-									""
-								) : (
-									<Badge>{`更新日：${detailVocabulary?.updated_at.toLocaleString(
-										"ja-JP",
-										options
-									)}`}</Badge>
-								)}
-							</FormControl>
-						</form>
-					</ModalBody>
-					<form onSubmit={handleDelSubmit(onDeleteSubmit)} id="delete">
-						<Input
-							type="hidden"
-							defaultValue={detailVocabulary?.vocabulary_id}
-							{...delRegister("vocabulary_id")}
-						/>
+							)}
+							<br />
+							{detailVocabulary?.updated_at && (
+								<Badge>{`更新日：${detailVocabulary?.updated_at.toLocaleString(
+									"ja-JP",
+									options
+								)}`}</Badge>
+							)}
+						</FormControl>
 					</form>
-					<ModalFooter>
-						<Button
-							colorScheme="teal"
-							mr={2}
-							isLoading={isSubmitting}
-							form="update"
-							type="submit"
-						>
-							更新
-						</Button>
-						<Button
-							colorScheme="red"
-							mr={2}
-							isLoading={isDelSubmitting}
-							form="delete"
-							type="submit"
-						>
-							削除
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
+				</ModalBody>
+				<form onSubmit={handleDelSubmit(onDeleteSubmit)} id="delete">
+					<Input
+						type="hidden"
+						defaultValue={detailVocabulary.vocabulary_id}
+						{...delRegister("vocabulary_id")}
+					/>
+				</form>
+				<ModalFooter>
+					<Button
+						colorScheme="teal"
+						mr={2}
+						isLoading={isSubmitting}
+						form="update"
+						type="submit"
+					>
+						更新
+					</Button>
+					<Button
+						colorScheme="red"
+						mr={2}
+						isLoading={isDelSubmitting}
+						form="delete"
+						type="submit"
+					>
+						削除
+					</Button>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
 	);
 };

@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useRef } from "react";
 import {
 	Button,
 	Table,
@@ -11,44 +11,56 @@ import {
 } from "@chakra-ui/react";
 import { Vocabulary } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Loading } from "@/features/Vocabulary/components/loading";
+import { Loading } from "@Vocabulary/components/loading";
+import { ExVocabulary, useVocabularies } from "@Vocabulary/VocabularyContext";
 
 export const Show: FC<{
-	submitFlg: boolean;
+	submitId: number | null;
+	setSubmitId: Dispatch<SetStateAction<number | null>>;
 	onOpen: () => void;
-	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary | undefined>>;
-}> = ({ submitFlg, onOpen, setDetailVocabulary }) => {
-	const { colorMode } = useColorMode();
-	const [vocabularies, setVocabularies] = useState<Vocabulary[]>([]);
+	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary>>;
+}> = ({ submitId, setSubmitId, onOpen, setDetailVocabulary }) => {
 	const [onLoading, setOnLoading] = useState<boolean>(true);
+	const { colorMode } = useColorMode();
+	const { vocabularies, setVocabularies } = useVocabularies();
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		setOnLoading(true);
-		const getVocabularies = async () => {
-			const response: Vocabulary[] = await fetch(`/api/vocabulary`)
-				.then((response) => response.json())
-				.catch((e) => {
-					console.error(e);
-				})
-				.finally(() => {
-					setOnLoading(false);
-				});
+		console.log(submitId);
+		if (submitId != null) {
+			setOnLoading(true);
+			const fetchVocabularies = async () => {
+				const response: ExVocabulary[] = await fetch(`/api/vocabulary`)
+					.then((response) => response.json())
+					.catch((e) => {
+						console.error(e);
+					})
+					.finally(() => {
+						setOnLoading(false);
+						setSubmitId(null);
+					});
 
-			response.forEach((e) => {
-				e.created_at = new Date(e.created_at);
-				e.updated_at = e.updated_at ? new Date(e.updated_at) : null;
-			});
-			setVocabularies(response);
-		};
-		getVocabularies();
+				response.forEach((e) => {
+					e.created_at = new Date(e.created_at);
+					e.updated_at = e.updated_at ? new Date(e.updated_at) : null;
+					e.isDisplay = true;
+				});
+				setVocabularies(response);
+				if (submitId === -1 && scrollRef.current) {
+					scrollRef.current.scrollIntoView({ behavior: "smooth" });
+				}
+				console.log("fetch");
+			};
+			fetchVocabularies();
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [submitFlg]);
+	}, [submitId]);
 
 	const onClickEditBtn = function (vocabulary: Vocabulary) {
 		onOpen();
 		setDetailVocabulary(vocabulary);
 	};
-
 	let idx = 1;
 	return (
 		<>
@@ -64,9 +76,11 @@ export const Show: FC<{
 					{onLoading ? (
 						<Loading></Loading>
 					) : (
+						vocabularies &&
 						vocabularies.map((vocabulary) => {
 							return (
-								!vocabulary.deleted_at && (
+								!vocabulary.deleted_at &&
+								vocabulary.isDisplay && (
 									<Tr
 										key={vocabulary.vocabulary_id}
 										_hover={{
@@ -92,6 +106,7 @@ export const Show: FC<{
 					)}
 				</Tbody>
 			</Table>
+			<div ref={scrollRef} className="bottom" />
 		</>
 	);
 };

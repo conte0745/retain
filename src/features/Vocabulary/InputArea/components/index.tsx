@@ -12,9 +12,8 @@ import {
 import { Vocabulary } from "@prisma/client";
 
 export const InputArea: FC<{
-	submitFlg: boolean;
-	setSubmitFlg: Dispatch<SetStateAction<boolean>>;
-}> = ({ submitFlg, setSubmitFlg }) => {
+	setSubmitId: Dispatch<SetStateAction<number | null>>;
+}> = ({ setSubmitId }) => {
 	const {
 		handleSubmit,
 		register,
@@ -29,22 +28,19 @@ export const InputArea: FC<{
 		}
 		await fetch(`api/vocabulary`, {
 			method: "post",
-			headers: {
-				// "Content-Type": "application/json",
-			},
 			body: JSON.stringify(values),
 		})
 			.then(async (response) => {
 				setValue("title", "");
 				const { message } = await response.json();
 				if (message === "OK") {
-					setSubmitFlg(!submitFlg);
 					toast({
 						title: "Success",
 						description: "追加に成功しました。",
 						status: "success",
 						isClosable: true,
 					});
+					setSubmitId(-1);
 				} else {
 					toast({
 						title: "エラー",
@@ -64,10 +60,12 @@ export const InputArea: FC<{
 				<HStack>
 					<Input
 						id="title"
+						width={"25em"}
 						{...register("title", {
 							required: "必須項目です。",
 							maxLength: { value: 190, message: "190文字までの入力です。" },
 						})}
+						placeholder="追加する内容を入力してください"
 					/>
 					<Button
 						size="sm"
