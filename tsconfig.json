@@ -22,7 +22,8 @@
 			"@Drill/*": ["src/features/Drill/*"],
 			"@DrillShow/*": ["src/features/Drill/Show/*"],
 			"@DrillDetail/*": ["src/features/Drill/Detail/*"],
-			"@Header/*": ["src/features/Header/*"]
+			"@Header/*": ["src/features/Header/*"],
+			"@Mypage/*": ["src/features/Mypage/*"]
 		},
 		/* Bundler mode */
 		"moduleResolution": "bundler",

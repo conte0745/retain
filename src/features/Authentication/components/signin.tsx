@@ -7,15 +7,14 @@ import {
 	FormLabel,
 	Heading,
 	Input,
-	Text,
 	useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { AuthUser } from "@/types/AuthUser";
-import { FirebaseError, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseconfig } from "@/types/AuthUser";
-import { useState } from "react";
+import { toastAuth } from "./toastAuth";
 
 export const SignIn = () => {
 	const app = initializeApp(firebaseconfig);
@@ -26,7 +25,6 @@ export const SignIn = () => {
 		formState: { errors, isSubmitting },
 	} = useForm<AuthUser>();
 	const toast = useToast();
-	const [errorMsg, setErrorMsg] = useState<string | undefined | null>();
 
 	const onSubmit = async (values: AuthUser) => {
 		if (!values.email && !values.password) {
@@ -45,27 +43,7 @@ export const SignIn = () => {
 				return response;
 			});
 
-		if (response instanceof FirebaseError) {
-			toast({
-				title: "Failed",
-				description: "サインインに失敗しました。",
-				status: "error",
-				isClosable: true,
-			});
-			if (response.code === "auth/invalid-credential")
-				setErrorMsg("メールアドレスもしくはパスワードが異なります.");
-			else {
-				setErrorMsg(response.message);
-			}
-		} else {
-			toast({
-				title: "Success",
-				description: "サインインに成功しました。",
-				status: "success",
-				isClosable: true,
-			});
-			setErrorMsg(undefined);
-		}
+		toastAuth(toast, response);
 	};
 	return (
 		<>
@@ -94,11 +72,11 @@ export const SignIn = () => {
 						{...register("password", {
 							required: "必須項目です。",
 						})}
+						autoComplete="on"
 					/>
 					<FormErrorMessage>
 						{errors.password && errors.password.message}
 					</FormErrorMessage>
-					<Text color={"red"}>{errorMsg}</Text>
 				</FormControl>
 				<br />
 				<Button

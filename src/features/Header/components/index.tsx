@@ -66,6 +66,11 @@ export const Header = () => {
 							</Link>
 						))}
 					{user && !user!.isAnonymous && (
+						<Link href="/mypage" className={classes.none_border}>
+							<MenuItem>マイページ</MenuItem>
+						</Link>
+					)}
+					{user && !user!.isAnonymous && (
 						<MenuItem>
 							<SignOut></SignOut>
 						</MenuItem>

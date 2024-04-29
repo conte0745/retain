@@ -32,6 +32,7 @@ export default defineConfig({
 			"@DrillShow": resolve(__dirname, "./src/features/Drill/Show/"),
 			"@DrillDetail": resolve(__dirname, "./src/features/Drill/Detail/"),
 			"@Header": resolve(__dirname, "./src/features/Header"),
+			"@Mypage": resolve(__dirname, "./src/features/Mypage"),
 			"~": resolve(__dirname, "./public/"),
 		},
 	},
