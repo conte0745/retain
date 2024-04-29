@@ -11,13 +11,14 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { AuthUser, firebaseconfig } from "@/types/AuthUser";
-import { FirebaseError, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	updateProfile,
 } from "firebase/auth";
 import { redirect } from "next/navigation";
+import { toastAuth } from "./toastAuth";
 
 export const SignUp = () => {
 	const app = initializeApp(firebaseconfig);
@@ -47,22 +48,7 @@ export const SignUp = () => {
 				return error;
 			});
 
-		if (response instanceof FirebaseError) {
-			console.error(response);
-			toast({
-				title: "Failed",
-				description: "サインアップに失敗しました。",
-				status: "error",
-				isClosable: true,
-			});
-		} else {
-			toast({
-				title: "Success",
-				description: "サインアップに成功しました。",
-				status: "success",
-				isClosable: true,
-			});
-		}
+		toastAuth(toast, response);
 	};
 	if (!auth.currentUser?.isAnonymous) {
 		redirect("/drill");
@@ -96,6 +82,7 @@ export const SignUp = () => {
 						{...register("password", {
 							required: "必須項目です。",
 						})}
+						autoComplete="on"
 					/>
 					<FormErrorMessage>
 						{errors.password && errors.password.message}

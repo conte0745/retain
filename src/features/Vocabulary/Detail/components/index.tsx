@@ -137,12 +137,9 @@ export const ModalArea: FC<ModalAreaProps> = ({
 	};
 
 	const handleToggleDescription = () => {
-		console.log("click", isHidden);
-		setIsHidden(!isHidden);
-		setValue(
-			"description",
-			isHidden ? "内緒" : detailVocabulary.description ?? "未作成"
-		);
+		setIsHidden(false);
+		setValue("description", detailVocabulary.description ?? "未作成");
+		console.log("click");
 	};
 
 	useEffect(() => {
@@ -187,7 +184,9 @@ export const ModalArea: FC<ModalAreaProps> = ({
 							</FormErrorMessage>
 							<br />
 							<br />
-							<Button onClick={handleToggleDescription}>表示切り替え</Button>
+							<Button onClick={handleToggleDescription} isDisabled={!isHidden}>
+								答え
+							</Button>
 							<br />
 							<br />
 							<FormLabel htmlFor="update_description">説明</FormLabel>
@@ -261,3 +260,5 @@ export const ModalArea: FC<ModalAreaProps> = ({
 		</Modal>
 	);
 };
+
+// https://github.com/naveenchr/SpringBoot-SeleniumFramework
