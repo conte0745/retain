@@ -26,7 +26,6 @@ export const Withdraw = () => {
 			const response = await user
 				.delete()
 				.then((response) => {
-					console.log(response);
 					return response;
 				})
 				.catch((error) => {

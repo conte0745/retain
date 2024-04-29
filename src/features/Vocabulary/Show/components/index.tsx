@@ -26,7 +26,6 @@ export const Show: FC<{
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		console.log(submitId);
 		if (submitId != null) {
 			setOnLoading(true);
 			const fetchVocabularies = async () => {
@@ -49,7 +48,6 @@ export const Show: FC<{
 				if (submitId === -1 && scrollRef.current) {
 					scrollRef.current.scrollIntoView({ behavior: "smooth" });
 				}
-				console.log("fetch");
 			};
 			fetchVocabularies();
 		}
@@ -87,17 +85,20 @@ export const Show: FC<{
 											background:
 												colorMode === "light" ? "gray.100" : "blackAlpha.700",
 										}}
-										className="vocabularies"
+										className={`vocabularies[${idx}]`}
 									>
-										<Td className="vocabularies.index">
+										<Td className={`vocabularies[${idx}].index`}>
 											{!vocabulary.deleted_at && idx++}
 										</Td>
-										<Td className="vocabularies.title" wordBreak={"break-word"}>
+										<Td
+											className={`vocabularies[${idx - 1}].title`}
+											wordBreak={"break-word"}
+										>
 											{vocabulary.title}
 										</Td>
 										<Td>
 											<Button
-												className="vocabularies.editBtn"
+												className={`vocabularies[${idx - 1}].editBtn`}
 												size={"xs"}
 												onClick={() => onClickEditBtn(vocabulary)}
 												_hover={{ background: "blue.300" }}
