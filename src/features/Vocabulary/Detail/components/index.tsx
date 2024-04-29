@@ -139,7 +139,6 @@ export const ModalArea: FC<ModalAreaProps> = ({
 	const handleToggleDescription = () => {
 		setIsHidden(false);
 		setValue("description", detailVocabulary.description ?? "未作成");
-		console.log("click");
 	};
 
 	useEffect(() => {
@@ -241,6 +240,7 @@ export const ModalArea: FC<ModalAreaProps> = ({
 						colorScheme="teal"
 						mr={2}
 						isLoading={isSubmitting}
+						isDisabled={isHidden}
 						form="update"
 						type="submit"
 					>
