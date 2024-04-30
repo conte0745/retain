@@ -53,9 +53,8 @@
 	},
 	"scripts": {
 		"dev": "next",
-		"build": "tsc && vite build",
-		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview",
+		"build": "next build",
+		"emulate": "firebase emulators:start",
 		"test": "jest",
 		"test:watch": "jest --watch"
 	}

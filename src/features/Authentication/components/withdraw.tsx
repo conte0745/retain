@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
-import { useToastAuth } from "./toastAuth";
+import { toastAuth } from "./toastAuth";
 import { Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { redirect } from "next/navigation";
@@ -32,7 +32,7 @@ export const Withdraw = () => {
 					console.error(error);
 					return error;
 				});
-			setCode(useToastAuth(toast, response, "withdraw"));
+			setCode(toastAuth(toast, response, "withdraw"));
 		}
 	};
 

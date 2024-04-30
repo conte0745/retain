@@ -20,7 +20,7 @@ import {
 	updatePassword,
 	updateProfile,
 } from "firebase/auth";
-import { useToastAuth } from "./toastAuth";
+import { toastAuth } from "./toastAuth";
 import { useState } from "react";
 import { redirect } from "react-router-dom";
 
@@ -76,7 +76,7 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(useToastAuth(toast, responseEmail, "change"));
+		setCode(toastAuth(toast, responseEmail, "change"));
 	};
 
 	const onSubmitPassword = async (values: AuthUser) => {
@@ -100,7 +100,7 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(useToastAuth(toast, responsePassword, "change"));
+		setCode(toastAuth(toast, responsePassword, "change"));
 	};
 
 	const onSubmitDisplayName = async (values: AuthUser) => {
@@ -119,7 +119,7 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(useToastAuth(toast, responseDisplayName, "change"));
+		setCode(toastAuth(toast, responseDisplayName, "change"));
 	};
 
 	return (
