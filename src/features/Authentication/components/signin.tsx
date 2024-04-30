@@ -14,7 +14,7 @@ import { AuthUser } from "@/types/AuthUser";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseconfig } from "@/types/AuthUser";
-import { useToastAuth } from "./toastAuth";
+import { toastAuth } from "./toastAuth";
 
 export const SignIn = () => {
 	const app = initializeApp(firebaseconfig);
@@ -43,7 +43,7 @@ export const SignIn = () => {
 				return response;
 			});
 
-		useToastAuth(toast, response, "signin");
+		toastAuth(toast, response, "signin");
 	};
 	return (
 		<>

@@ -3,7 +3,7 @@
 import { CreateToastFnReturn } from "@chakra-ui/react";
 import { FirebaseError } from "firebase/app";
 
-export const useToastAuth = (
+export const toastAuth = (
 	toast: CreateToastFnReturn,
 	response: object,
 	page: string

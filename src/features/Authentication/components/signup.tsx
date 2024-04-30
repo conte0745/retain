@@ -18,7 +18,7 @@ import {
 	updateProfile,
 } from "firebase/auth";
 import { redirect } from "next/navigation";
-import { useToastAuth } from "./toastAuth";
+import { toastAuth } from "./toastAuth";
 
 export const SignUp = () => {
 	const app = initializeApp(firebaseconfig);
@@ -50,7 +50,7 @@ export const SignUp = () => {
 				return error;
 			});
 
-		useToastAuth(toast, response, "signup");
+		toastAuth(toast, response, "signup");
 	};
 	if (!auth.currentUser?.isAnonymous) {
 		redirect("/drill");
