@@ -18,11 +18,13 @@ import {
 	updateProfile,
 } from "firebase/auth";
 import { redirect } from "next/navigation";
-import { toastAuth } from "./toastAuth";
+import { useToastAuth } from "./toastAuth";
 
 export const SignUp = () => {
 	const app = initializeApp(firebaseconfig);
 	const auth = getAuth(app);
+	const passwordPattern =
+		"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+={}[]|;:'\",.<>?]).{8,}$";
 	const {
 		handleSubmit,
 		register,
@@ -48,7 +50,7 @@ export const SignUp = () => {
 				return error;
 			});
 
-		toastAuth(toast, response);
+		useToastAuth(toast, response, "signup");
 	};
 	if (!auth.currentUser?.isAnonymous) {
 		redirect("/drill");
@@ -56,11 +58,11 @@ export const SignUp = () => {
 
 	return (
 		<>
-			<Heading>サインアップ</Heading>
+			<Heading id="signup-heading">サインアップ</Heading>
 			<br />
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} id="signup-form">
 				<FormControl isInvalid={errors.email && true}>
-					<FormLabel htmlFor="email">E-MAIL</FormLabel>
+					<FormLabel htmlFor="email">Eメール</FormLabel>
 					<Input
 						id="email"
 						type="email"
@@ -68,23 +70,32 @@ export const SignUp = () => {
 							required: "必須項目です。",
 						})}
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="signup-email-errors">
 						{errors.email && errors.email.message}
 					</FormErrorMessage>
 				</FormControl>
 				<br />
 
 				<FormControl isInvalid={errors.password && true}>
-					<FormLabel htmlFor="password">PASSWORD</FormLabel>
+					<FormLabel htmlFor="password">パスワード</FormLabel>
 					<Input
 						id="password"
 						type="password"
 						{...register("password", {
 							required: "必須項目です。",
+							minLength: {
+								value: 8,
+								message: "少なくとも8文字以上入力してください。",
+							},
+							pattern: {
+								value: new RegExp(passwordPattern),
+								message:
+									"大文字・小文字・英数字・特殊文字を少なくとも1つ以上含めてください。",
+							},
 						})}
 						autoComplete="on"
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="signup-password-errors">
 						{errors.password && errors.password.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -96,10 +107,13 @@ export const SignUp = () => {
 						id="displayName"
 						type="text"
 						{...register("displayName", {
-							maxLength: 10,
+							maxLength: {
+								value: 10,
+								message: "10文字以下で入力してください。",
+							},
 						})}
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="signup-displayName-errors">
 						{errors.displayName && errors.displayName.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -110,6 +124,7 @@ export const SignUp = () => {
 					colorScheme="teal"
 					isLoading={isSubmitting}
 					type="submit"
+					id="signup-button"
 				>
 					SignUp
 				</Button>

@@ -15,7 +15,7 @@ export const Mypage = () => {
 		<>
 			<Heading margin={"2rem"}>マイページ</Heading>
 			<Card margin={"1rem"}>
-				<CardHeader>ユーザ情報の編集</CardHeader>
+				<CardHeader id="user-info">ユーザ情報の編集</CardHeader>
 				<CardBody>
 					<Change />
 				</CardBody>
@@ -24,21 +24,21 @@ export const Mypage = () => {
 			<br />
 
 			<Card margin={"1rem"}>
-				<CardHeader>問題の一括登録</CardHeader>
+				<CardHeader id="question-register">問題の一括登録</CardHeader>
 				<CardBody>---作成中---</CardBody>
 				<CardFooter></CardFooter>
 			</Card>
 			<br />
 
 			<Card margin={"1rem"}>
-				<CardHeader>問題の一括登ダウンロード</CardHeader>
+				<CardHeader id="question-download">問題のCSVダウンロード</CardHeader>
 				<CardBody>---作成中---</CardBody>
 				<CardFooter></CardFooter>
 			</Card>
 			<br />
 
 			<Card margin={"1rem"}>
-				<CardHeader>PDF出力</CardHeader>
+				<CardHeader id="output-pdf">PDF出力</CardHeader>
 				<CardBody>---作成中---</CardBody>
 				<CardFooter></CardFooter>
 			</Card>

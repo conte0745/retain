@@ -21,7 +21,10 @@ dist-ssr
 # Prisma
 prisma/migrations
 
+# VScode
 !.vscode/extensions.json
+
+
 .idea
 .DS_Store
 *.suo
@@ -36,3 +39,6 @@ prisma/migrations
 
 # 禁止元ワードリスト
 kinshi.csv
+
+# Firebase
+.firebaserc

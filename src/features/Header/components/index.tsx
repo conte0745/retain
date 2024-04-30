@@ -38,11 +38,15 @@ export const Header = () => {
 			</Box>
 			<Spacer />
 			<Box>
-				<Heading size={"lg"}>{pathname.split("/")[1].toUpperCase()}</Heading>
+				<Heading size={"lg"} id="header-center">
+					{pathname.split("/")[1].toUpperCase()}
+				</Heading>
 			</Box>
 			<Spacer />
-			{user && user!.isAnonymous && <Box>匿名</Box>}
-			{user && <Box>{user.displayName}</Box>}
+			{user && user!.isAnonymous && (
+				<Box className="user-display-name">匿名</Box>
+			)}
+			{user && <Box className="user-display-name">{user.displayName}</Box>}
 			<IconButton
 				icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
 				onClick={toggleColorMode}
@@ -55,23 +59,35 @@ export const Header = () => {
 				<MenuList>
 					{!user ||
 						(user!.isAnonymous && (
-							<Link href="/signin" className={classes.none_border}>
-								<MenuItem>サインイン</MenuItem>
+							<Link
+								href="/signin"
+								className={classes.none_border}
+								id="signin-anchor"
+							>
+								<MenuItem id="signin-menu-item">サインイン</MenuItem>
 							</Link>
 						))}
 					{!user ||
 						(user!.isAnonymous && (
-							<Link href="/signup" className={classes.none_border}>
-								<MenuItem>サインアップ</MenuItem>
+							<Link
+								href="/signup"
+								className={classes.none_border}
+								id="signup-anchor"
+							>
+								<MenuItem id="signup-menu-item">サインアップ</MenuItem>
 							</Link>
 						))}
 					{user && !user!.isAnonymous && (
-						<Link href="/mypage" className={classes.none_border}>
-							<MenuItem>マイページ</MenuItem>
+						<Link
+							href="/mypage"
+							className={classes.none_border}
+							id="mypage-anchor"
+						>
+							<MenuItem id="mypage-menu-item">マイページ</MenuItem>
 						</Link>
 					)}
 					{user && !user!.isAnonymous && (
-						<MenuItem>
+						<MenuItem id="signout-menu-item">
 							<SignOut></SignOut>
 						</MenuItem>
 					)}

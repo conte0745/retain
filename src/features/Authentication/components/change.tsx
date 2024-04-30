@@ -20,7 +20,7 @@ import {
 	updatePassword,
 	updateProfile,
 } from "firebase/auth";
-import { toastAuth } from "./toastAuth";
+import { useToastAuth } from "./toastAuth";
 import { useState } from "react";
 import { redirect } from "react-router-dom";
 
@@ -29,12 +29,15 @@ export const Change = () => {
 	const auth = getAuth(app);
 	const toast = useToast();
 	const [code, setCode] = useState<string | undefined | null>();
+	const passwordPattern =
+		"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+={}[]|;:'\",.<>?]).{8,}$";
 
 	if (code == "auth/requires-recent-login") {
 		signOut(auth).then(() => {
 			redirect("/signin");
 		});
 	}
+	//          fgRRT$
 
 	const {
 		handleSubmit: handleSubmitEmail,
@@ -73,7 +76,7 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(toastAuth(toast, responseEmail));
+		setCode(useToastAuth(toast, responseEmail, "change"));
 	};
 
 	const onSubmitPassword = async (values: AuthUser) => {
@@ -97,7 +100,7 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(toastAuth(toast, responsePassword));
+		setCode(useToastAuth(toast, responsePassword, "change"));
 	};
 
 	const onSubmitDisplayName = async (values: AuthUser) => {
@@ -116,12 +119,12 @@ export const Change = () => {
 				return error;
 			});
 
-		setCode(toastAuth(toast, responseDisplayName));
+		setCode(useToastAuth(toast, responseDisplayName, "change"));
 	};
 
 	return (
 		<>
-			<form onSubmit={handleSubmitEmail(onSubmitEmail)}>
+			<form onSubmit={handleSubmitEmail(onSubmitEmail)} id="email-form">
 				<FormControl isInvalid={errorsEmail.email && true}>
 					<FormLabel htmlFor="email">E-MAIL</FormLabel>
 					<Input
@@ -132,7 +135,7 @@ export const Change = () => {
 							required: "必須項目です。",
 						})}
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="change-email-errors">
 						{errorsEmail.email && errorsEmail.email.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -143,13 +146,17 @@ export const Change = () => {
 						colorScheme="teal"
 						isLoading={isSubmittingEmail}
 						type="submit"
+						id="change-email-button"
 					>
 						Emailの変更
 					</Button>
 				</HStack>
 			</form>
 
-			<form onSubmit={handleSubmitPassword(onSubmitPassword)}>
+			<form
+				onSubmit={handleSubmitPassword(onSubmitPassword)}
+				id="password-form"
+			>
 				<FormControl isInvalid={errorsPassword.password && true}>
 					<FormLabel htmlFor="password">PASSWORD</FormLabel>
 					<Input
@@ -158,10 +165,19 @@ export const Change = () => {
 						placeholder="現在のパスワードは表示できません"
 						{...registerPassword("password", {
 							required: "必須項目です。",
+							minLength: {
+								value: 8,
+								message: "少なくとも8文字以上入力してください。",
+							},
+							pattern: {
+								value: new RegExp(passwordPattern),
+								message:
+									"大文字・小文字・英数字・特殊文字を少なくとも1つ以上含めてください。",
+							},
 						})}
 						autoComplete="on"
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="change-password-errors">
 						{errorsPassword.password && errorsPassword.password.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -172,13 +188,17 @@ export const Change = () => {
 						colorScheme="teal"
 						isLoading={isSubmittingPassword}
 						type="submit"
+						id="change-password-button"
 					>
 						パスワードの変更
 					</Button>
 				</HStack>
 			</form>
 
-			<form onSubmit={handleSubmitDisplayName(onSubmitDisplayName)}>
+			<form
+				onSubmit={handleSubmitDisplayName(onSubmitDisplayName)}
+				id="displayName-form"
+			>
 				<FormControl isInvalid={errorsDisplayName.displayName && true}>
 					<FormLabel htmlFor="displayName">表示名（任意）</FormLabel>
 					<Input
@@ -186,10 +206,13 @@ export const Change = () => {
 						type="text"
 						defaultValue={auth.currentUser?.displayName ?? ""}
 						{...registerDisplayName("displayName", {
-							maxLength: 10,
+							maxLength: {
+								value: 10,
+								message: "10文字以下の入力をしてください。",
+							},
 						})}
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="change-displayName-errors">
 						{errorsDisplayName.displayName &&
 							errorsDisplayName.displayName.message}
 					</FormErrorMessage>
@@ -201,6 +224,7 @@ export const Change = () => {
 						colorScheme="teal"
 						isLoading={isSubmittingDisplayName}
 						type="submit"
+						id="change-displayName-button"
 					>
 						表示名の変更
 					</Button>

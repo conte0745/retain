@@ -8,7 +8,7 @@ import {
 	useState,
 } from "react";
 import { AuthUserState, firebaseconfig } from "@/types/AuthUser";
-import { signInAnonymously } from "firebase/auth";
+import { connectAuthEmulator, signInAnonymously } from "firebase/auth";
 
 const initialState: AuthUserState = {
 	user: undefined,
@@ -28,6 +28,9 @@ export const AuthProvider = ({ children }: Props) => {
 				const app = initializeApp(firebaseconfig);
 				import("@firebase/auth").then(({ getAuth, onAuthStateChanged }) => {
 					const auth = getAuth(app);
+					if (window.location.hostname === "localhost") {
+						connectAuthEmulator(auth, "http://localhost:9099");
+					}
 					onAuthStateChanged(auth, (user) => {
 						if (!user) {
 							signInAnonymously(auth);

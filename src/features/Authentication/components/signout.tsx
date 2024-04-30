@@ -38,7 +38,9 @@ export const SignOut = () => {
 
 	return (
 		<>
-			<Box onClick={onSubmit}>サインアウト</Box>
+			<Box id="signout" onClick={onSubmit}>
+				サインアウト
+			</Box>
 		</>
 	);
 };
