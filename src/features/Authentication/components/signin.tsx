@@ -14,7 +14,7 @@ import { AuthUser } from "@/types/AuthUser";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseconfig } from "@/types/AuthUser";
-import { toastAuth } from "./toastAuth";
+import { useToastAuth } from "./toastAuth";
 
 export const SignIn = () => {
 	const app = initializeApp(firebaseconfig);
@@ -43,13 +43,13 @@ export const SignIn = () => {
 				return response;
 			});
 
-		toastAuth(toast, response);
+		useToastAuth(toast, response, "signin");
 	};
 	return (
 		<>
-			<Heading>サインイン</Heading>
+			<Heading id="signin-heading">サインイン</Heading>
 			<br />
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} id="signin-form">
 				<FormControl isInvalid={errors.email && true}>
 					<FormLabel htmlFor="email">E-MAIL</FormLabel>
 					<Input
@@ -59,7 +59,7 @@ export const SignIn = () => {
 							required: "必須項目です。",
 						})}
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="signin-email-errors">
 						{errors.email && errors.email.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -74,7 +74,7 @@ export const SignIn = () => {
 						})}
 						autoComplete="on"
 					/>
-					<FormErrorMessage>
+					<FormErrorMessage className="signin-password-errors">
 						{errors.password && errors.password.message}
 					</FormErrorMessage>
 				</FormControl>
@@ -84,6 +84,7 @@ export const SignIn = () => {
 					colorScheme="teal"
 					isLoading={isSubmitting}
 					type="submit"
+					id="signin-button"
 				>
 					SignIn
 				</Button>

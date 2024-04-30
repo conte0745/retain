@@ -260,5 +260,3 @@ export const ModalArea: FC<ModalAreaProps> = ({
 		</Modal>
 	);
 };
-
-// https://github.com/naveenchr/SpringBoot-SeleniumFramework

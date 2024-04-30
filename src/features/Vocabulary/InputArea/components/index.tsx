@@ -43,7 +43,7 @@ export const InputArea: FC<{
 					setSubmitId(-1);
 				} else {
 					toast({
-						title: "エラー",
+						title: "Failed",
 						description: "使用できない単語が含まれています。",
 						status: "error",
 						isClosable: true,
@@ -54,7 +54,7 @@ export const InputArea: FC<{
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmit(onSubmit)} id="vocabulary-add-form">
 			<FormControl isInvalid={errors.title && true}>
 				<FormLabel htmlFor="title"></FormLabel>
 				<HStack>
@@ -72,7 +72,7 @@ export const InputArea: FC<{
 						colorScheme="teal"
 						isLoading={isSubmitting}
 						type="submit"
-						className="vocabulary-submit"
+						id="vocabulary-submit-button"
 					>
 						追加
 					</Button>

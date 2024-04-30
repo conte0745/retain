@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
-import { toastAuth } from "./toastAuth";
+import { useToastAuth } from "./toastAuth";
 import { Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { redirect } from "next/navigation";
@@ -32,12 +32,12 @@ export const Withdraw = () => {
 					console.error(error);
 					return error;
 				});
-			setCode(toastAuth(toast, response));
+			setCode(useToastAuth(toast, response, "withdraw"));
 		}
 	};
 
 	return (
-		<Button onClick={deleteUser} margin={"2rem"}>
+		<Button id="withdraw-button" onClick={deleteUser} margin={"2rem"}>
 			退会
 		</Button>
 	);

@@ -7,8 +7,8 @@ import React from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
-	metadataBase: new URL("https://www.shiftonton.net/"),
-	// metadataBase: new URL("http://localhost:3000/"),
+	// metadataBase: new URL("https://www.shiftonton.net/"),
+	metadataBase: new URL("http://localhost:3000/"),
 	title: "RetainTutor",
 	description: "記憶を保持するチューターとして、記憶の定着をサポートします。",
 	openGraph: {
