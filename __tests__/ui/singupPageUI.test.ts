@@ -8,7 +8,6 @@ import {
 	sendKeysToElement,
 	getElement,
 	navigateAndPrepare,
-	generateRandomString,
 } from "./util";
 
 const BASE_URL = "http://localhost:3000";
@@ -148,7 +147,7 @@ describe("認証ページのテスト(サインアップ)", () => {
 						getElement(driver, By.id("signup-button")),
 					]);
 
-				const randomString = generateRandomString(8) + "_";
+				// const randomString = generateRandomString(8) + "_";
 				await sendKeysToElement(emailInput, TEST_EMAIL);
 				await sendKeysToElement(passwordInput, TEST_STRONG_PASSWORD);
 				await sendKeysToElement(displayNameInput, TEST_DISPLAY_NAME);

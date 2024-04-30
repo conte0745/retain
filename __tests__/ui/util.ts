@@ -6,7 +6,7 @@ import {
 	logging,
 	ThenableWebDriver,
 	until,
-	WebElementCondition,
+	WebElement,
 } from "selenium-webdriver";
 import { Options } from "selenium-webdriver/chrome";
 
@@ -115,7 +115,7 @@ export function setupDriver() {
  * @param element
  * @returns
  */
-export async function getText(element: { getText: () => any }) {
+export async function getText(element: WebElement) {
 	return await element.getText();
 }
 
@@ -124,10 +124,7 @@ export async function getText(element: { getText: () => any }) {
  * @param element
  * @param keys
  */
-export async function sendKeysToElement(
-	element: { sendKeys: (arg0: any) => any },
-	keys: string
-) {
+export async function sendKeysToElement(element: WebElement, keys: string) {
 	await element.sendKeys(keys);
 }
 
@@ -154,7 +151,7 @@ export function getBrowserLogs(driver: ThenableWebDriver) {
  * ログを表示する
  * @param logs
  */
-export function displayLogs(logs: any[]) {
+export function displayLogs(logs: logging.Entry[]) {
 	logs.forEach((log) => console.info(`[${log.level.name}] ${log.message}`));
 }
 
@@ -169,7 +166,7 @@ export async function navigateAndPrepare(
 	BASE_URL: string,
 	linkText: string
 ) {
-	await sleep(1000);
+	await sleep(2000);
 	await driver.get(`${BASE_URL}/`);
 	await sleep(2000);
 	await clickElement(

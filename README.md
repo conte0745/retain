@@ -37,7 +37,7 @@ yarn test
 デフォルトのポート「9099」
 
 ```sh
-yarn emulators
+yarn emulate
 ```
 
 ### 環境

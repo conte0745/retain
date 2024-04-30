@@ -1,5 +1,5 @@
 import { By, logging, ThenableWebDriver, until } from "selenium-webdriver";
-import { getBrowserLogs, setupDriver } from "./util";
+import { displayLogs, getBrowserLogs, setupDriver } from "./util";
 
 const BASE_URL = "http://localhost:3000";
 const TIMEOUT = 100000;
@@ -15,6 +15,7 @@ describe("トップページのテスト", () => {
 
 	afterAll(async () => {
 		await driver.quit();
+		displayLogs(logs);
 	});
 
 	it(
@@ -62,7 +63,7 @@ async function checkLinkNavigation(
 		await driver.get(baseUrl);
 		const linkElement = await driver.findElement(By.linkText(link.text));
 		await linkElement.click();
-		let currentUrl = await driver.getCurrentUrl();
+		const currentUrl = await driver.getCurrentUrl();
 		expect(currentUrl).toBe(baseUrl + link.url);
 		await driver.navigate().back();
 	}
