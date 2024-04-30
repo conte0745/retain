@@ -1,4 +1,4 @@
-import { By, until, ThenableWebDriver } from "selenium-webdriver";
+import { By, until, ThenableWebDriver, logging } from "selenium-webdriver";
 
 import {
 	setupDriver,
@@ -9,6 +9,7 @@ import {
 	getText,
 	sleep,
 	scrollToBottom,
+	displayLogs,
 } from "./util";
 
 const BASE_URL = "http://localhost:3000";
@@ -21,6 +22,7 @@ const TEST_DISPLAY_NAME = "pon";
 
 describe("マイページのテスト", () => {
 	let driver: ThenableWebDriver;
+	let logs: logging.Entry[];
 
 	beforeAll(async () => {
 		driver = setupDriver();
@@ -36,6 +38,7 @@ describe("マイページのテスト", () => {
 
 	afterAll(async () => {
 		await driver.quit();
+		displayLogs(logs);
 	});
 
 	describe("ユーザー退会のテスト", () => {
@@ -57,7 +60,7 @@ describe("マイページのテスト", () => {
 
 				// アラートを取得して操作
 				const alert = await driver.switchTo().alert();
-				expect(await getText(alert)).toBe(
+				expect(await alert.getText()).toBe(
 					"ユーザを削除します。よろしいですか？"
 				);
 
