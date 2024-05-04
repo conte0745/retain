@@ -17,8 +17,11 @@ export async function POST(
 ) {
 	const { title, description } = await request.json();
 	const ngList = getNgList().split(",");
-	const isNgTitle = ngList.some((ng) => title.includes(ng));
-	const isNgDescription = ngList.some((ng) => description.includes(ng));
+
+	const isNgTitle = title ? ngList.some((ng) => title.includes(ng)) : false;
+	const isNgDescription = description
+		? ngList.some((ng) => description.includes(ng))
+		: false;
 
 	if (isNgTitle || isNgDescription) {
 		return NextResponse.json({ message: "NG" }, { status: 200 });

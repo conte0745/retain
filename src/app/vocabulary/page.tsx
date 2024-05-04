@@ -5,11 +5,11 @@ import { HStack, IconButton, useDisclosure } from "@chakra-ui/react";
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { Vocabulary } from "@prisma/client";
 
-import { Show } from "@Vocabulary/Show/components";
-import { InputArea } from "@Vocabulary/InputArea/components";
-import { SearchArea } from "@Vocabulary/Search/components";
-import { ModalArea } from "@Vocabulary/Detail/components";
-import { VocabularyProvider } from "@Vocabulary/VocabularyContext";
+import { Show } from "@/features/Vocabulary/components/showArea";
+import { InputArea } from "@/features/Vocabulary/components/inputArea";
+import { SearchArea } from "@/features/Vocabulary/components/searchArea";
+import { ModalArea } from "@/features/Vocabulary/components/modalArea";
+import { VocabularyProvider } from "@/features/Vocabulary/components/VocabularyContext";
 import { MODE } from "@/utils/constant";
 
 const Vocabularies = () => {
@@ -48,7 +48,7 @@ const Vocabularies = () => {
 							icon={<SearchIcon />}
 							onClick={() => setMode(MODE.SEARCH)}
 						/>
-						<InputArea setSubmitId={setSubmitId}></InputArea>
+						<InputArea></InputArea>
 					</>
 				)}
 			</HStack>
@@ -63,7 +63,6 @@ const Vocabularies = () => {
 			<ModalArea
 				isOpen={isOpen}
 				onClose={onClose}
-				setSubmitId={setSubmitId}
 				detailVocabulary={detailVocabulary}
 			></ModalArea>
 		</VocabularyProvider>
