@@ -12,7 +12,10 @@ import {
 import { Vocabulary } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Loading } from "@Vocabulary/components/loading";
-import { ExVocabulary, useVocabularies } from "@Vocabulary/VocabularyContext";
+import {
+	ExVocabulary,
+	useVocabularies,
+} from "@Vocabulary/components/VocabularyContext";
 
 export const Show: FC<{
 	submitId: number | null;
@@ -56,8 +59,8 @@ export const Show: FC<{
 	}, [submitId]);
 
 	const onClickEditBtn = function (vocabulary: Vocabulary) {
-		onOpen();
 		setDetailVocabulary(vocabulary);
+		onOpen();
 	};
 	let idx = 1;
 	return (
