@@ -1,16 +1,16 @@
 "use client";
-import { InputArea } from "@/features/Vocabulary/InputArea/components";
-import { Show } from "@/features/Vocabulary/Show/components";
-import { ModalArea } from "@/features/Vocabulary/Detail/components";
+
 import { useState } from "react";
 import { HStack, IconButton, useDisclosure } from "@chakra-ui/react";
-
-import { VocabularyProvider } from "@Vocabulary/VocabularyContext";
-import { Vocabulary } from "@prisma/client";
-import { SearchArea } from "@Vocabulary/Search/components";
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
+import { Vocabulary } from "@prisma/client";
 
-type Mode = "INPUT" | "SEARCH";
+import { Show } from "@Vocabulary/Show/components";
+import { InputArea } from "@Vocabulary/InputArea/components";
+import { SearchArea } from "@Vocabulary/Search/components";
+import { ModalArea } from "@Vocabulary/Detail/components";
+import { VocabularyProvider } from "@Vocabulary/VocabularyContext";
+import { MODE } from "@/utils/constant";
 
 const Vocabularies = () => {
 	const initVocabulary = {
@@ -22,7 +22,7 @@ const Vocabularies = () => {
 		deleted_at: null,
 	};
 
-	const [mode, setMode] = useState<Mode>("INPUT");
+	const [mode, setMode] = useState<MODE>(MODE.INPUT);
 	const [submitId, setSubmitId] = useState<number | null>(0);
 	const [detailVocabulary, setDetailVocabulary] =
 		useState<Vocabulary>(initVocabulary);
@@ -32,12 +32,12 @@ const Vocabularies = () => {
 		<VocabularyProvider>
 			<br />
 			<HStack>
-				{mode === "SEARCH" ? (
+				{mode === MODE.SEARCH ? (
 					<>
 						<IconButton
 							aria-label="Add"
 							icon={<AddIcon />}
-							onClick={() => setMode("INPUT")}
+							onClick={() => setMode(MODE.INPUT)}
 						/>
 						<SearchArea />
 					</>
@@ -46,7 +46,7 @@ const Vocabularies = () => {
 						<IconButton
 							aria-label="Search"
 							icon={<SearchIcon />}
-							onClick={() => setMode("SEARCH")}
+							onClick={() => setMode(MODE.SEARCH)}
 						/>
 						<InputArea setSubmitId={setSubmitId}></InputArea>
 					</>

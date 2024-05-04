@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthContext } from "@/features/Authentication/components/AuthProvider";
+import { useAuthContext } from "@Auth/components/AuthProvider";
 import { Mypage } from "@Mypage/components";
 import { redirect } from "next/navigation";
 

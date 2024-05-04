@@ -1,8 +1,8 @@
 "use client";
-import { InputArea } from "@/features/Question/InputArea/components";
-import { Show } from "@/features/Question/Show/components";
-import { ModalArea } from "@/features/Question/Detail/components";
 import { useState } from "react";
+import { InputArea } from "@Question/InputArea/components";
+import { Show } from "@Question/Show/components";
+import { ModalArea } from "@Question/Detail/components";
 import { useDisclosure } from "@chakra-ui/react";
 import { Question } from "@prisma/client";
 
