@@ -10,6 +10,7 @@ const Signin = () => {
 	if (!user?.isAnonymous) {
 		redirect("/");
 	}
+
 	return (
 		<>
 			<SignIn />
