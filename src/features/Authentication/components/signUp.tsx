@@ -11,7 +11,7 @@ import {
 import { app } from "@/types/AuthUser";
 import { getAuth } from "firebase/auth";
 import { redirect } from "next/navigation";
-import { useSignUp } from "@Auth/hooks/useSignUp";
+import { useSignUp } from "@/features/Authentication/hooks/useSignUp";
 import { PASSWORD_PATTERN } from "@/utils/constant";
 
 export const SignUp = () => {
@@ -58,7 +58,7 @@ export const SignUp = () => {
 							pattern: {
 								value: new RegExp(PASSWORD_PATTERN),
 								message:
-									"大文字・小文字・英数字を少なくとも1つ以上含めてください。",
+									"大文字・小文字・英数字・特殊文字を少なくとも1つ以上含めてください。",
 							},
 						})}
 						autoComplete="on"
