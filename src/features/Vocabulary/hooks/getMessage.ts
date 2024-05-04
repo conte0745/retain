@@ -2,6 +2,7 @@ export enum TASK {
 	ADD,
 	UPDATE,
 	DELETE,
+	SHOW,
 }
 
 export enum STATE {
@@ -19,6 +20,8 @@ export function getMessageTask(task: TASK) {
 			return "更新";
 		case TASK.DELETE:
 			return "削除";
+		case TASK.SHOW:
+			return "データ取得";
 	}
 }
 

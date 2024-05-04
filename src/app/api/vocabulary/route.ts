@@ -7,6 +7,9 @@ export async function GET() {
 	try {
 		await prisma.$connect();
 		const vocabularies = await prisma.vocabulary.findMany({
+			where: {
+				deleted_at: null,
+			},
 			orderBy: {
 				vocabulary_id: "asc",
 			},
