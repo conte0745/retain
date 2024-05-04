@@ -7,51 +7,19 @@ import {
 	FormLabel,
 	Heading,
 	Input,
-	useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { AuthUser, firebaseconfig } from "@/types/AuthUser";
-import { initializeApp } from "firebase/app";
-import {
-	createUserWithEmailAndPassword,
-	getAuth,
-	updateProfile,
-} from "firebase/auth";
+import { app } from "@/types/AuthUser";
+import { getAuth } from "firebase/auth";
 import { redirect } from "next/navigation";
-import { toastAuth } from "./toastAuth";
+import { useSignUp } from "@/features/Authentication/hooks/useSignUp";
+import { PASSWORD_PATTERN } from "@/utils/constant";
 
 export const SignUp = () => {
-	const app = initializeApp(firebaseconfig);
 	const auth = getAuth(app);
-	const passwordPattern =
-		"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+={}[]|;:'\",.<>?]).{8,}$";
-	const {
-		handleSubmit,
-		register,
-		formState: { errors, isSubmitting },
-	} = useForm<AuthUser>();
-	const toast = useToast();
 
-	const onSubmit = async (values: AuthUser) => {
-		if (!values.email && !values.password) {
-			return;
-		}
-		const response = await createUserWithEmailAndPassword(
-			auth,
-			values.email!,
-			values.password!
-		)
-			.then((userCredential) => {
-				updateProfile(userCredential.user, { displayName: values.displayName });
-				return userCredential.user;
-			})
-			.catch((error) => {
-				console.error(error);
-				return error;
-			});
+	const { handleSubmit, register, errors, isSubmitting, onSubmit } =
+		useSignUp();
 
-		toastAuth(toast, response, "signup");
-	};
 	if (!auth.currentUser?.isAnonymous) {
 		redirect("/drill");
 	}
@@ -88,7 +56,7 @@ export const SignUp = () => {
 								message: "少なくとも8文字以上入力してください。",
 							},
 							pattern: {
-								value: new RegExp(passwordPattern),
+								value: new RegExp(PASSWORD_PATTERN),
 								message:
 									"大文字・小文字・英数字・特殊文字を少なくとも1つ以上含めてください。",
 							},

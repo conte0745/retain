@@ -9,13 +9,12 @@ import {
 	getBrowserLogs,
 	displayLogs,
 	navigateAndPrepare,
+	BASE_URL,
+	TIMEOUT,
+	TEST_EMAIL,
+	TEST_WEAK_WEAK_PASSWORD,
+	TEST_STRONG_PASSWORD,
 } from "./util";
-
-const BASE_URL = "http://localhost:3000";
-const TIMEOUT = 100000;
-const TEST_EMAIL = "sample@sample.com";
-const TEST_WEAK_WEAK_PASSWORD = "pass";
-const TEST_STRONG_PASSWORD = "paSS&word?q=10";
 
 describe("認証ページのテスト(サインイン)", () => {
 	let driver: ThenableWebDriver;

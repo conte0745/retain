@@ -45,11 +45,11 @@ export const DetailDrill = () => {
 	});
 
 	async function onSubmit(values: AnswerResult) {
+		setValue(
+			"answer_result_is_correct",
+			onClickAnswerIndex?.toString() === correctAnswerIndex?.toString()
+		);
 		try {
-			setValue(
-				"answer_result_is_correct",
-				onClickAnswerIndex == correctAnswerIndex
-			);
 			if (onClickAnswerIndex !== undefined && !afterPost) {
 				const uid = user?.isAnonymous ? undefined : user?.uid;
 				await postAnswerResult(values, uid);
@@ -155,15 +155,12 @@ export const DetailDrill = () => {
 							defaultValue={question_id}
 							{...register("answer_result_question_id")}
 						/>
-						<Input
-							type="hidden"
-							defaultValue={0}
-							{...register("answer_result_is_correct")}
-						/>
+						<Input type="hidden" {...register("answer_result_is_correct")} />
 						<Button
 							colorScheme="teal"
 							mr={2}
 							isLoading={isSubmitting}
+							isDisabled={afterPost}
 							form="next"
 							type="submit"
 						>

@@ -13,19 +13,20 @@ import {
 	Spacer,
 	useColorMode,
 } from "@chakra-ui/react";
-import { SignOut } from "@Auth/components/signout";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import classes from "@Header/components/index.module.scss";
 
 import { useAuthContext } from "@Auth/components/AuthProvider";
-import { usePathname } from "next/navigation";
+import { SignOut } from "@Auth/components/signOut";
 
+import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 export const Header = () => {
 	const { user } = useAuthContext();
-	const pathname = usePathname();
 	const { colorMode, toggleColorMode } = useColorMode();
+	const pathname = usePathname();
+
 	return (
 		<HStack
 			bg={colorMode === "light" ? "gray.100" : "gray.900"}

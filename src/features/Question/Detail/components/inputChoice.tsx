@@ -11,7 +11,6 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import {
-	Control,
 	FieldErrors,
 	UseFieldArrayRemove,
 	UseFormRegister,
@@ -21,7 +20,6 @@ import { useState } from "react";
 
 type props = {
 	answer: Answer;
-	control: Control<QuestionAnswer, QuestionAnswer, QuestionAnswer>;
 	errors: FieldErrors<QuestionAnswer>;
 	index: number;
 	register: UseFormRegister<QuestionAnswer>;

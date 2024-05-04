@@ -224,7 +224,6 @@ export const ModalArea: FC<{
 												key={item.id}
 												answer={item}
 												errors={errors}
-												control={control}
 												index={index}
 												register={register}
 												remove={remove}

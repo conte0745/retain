@@ -1,4 +1,4 @@
-import { Change } from "@Auth/components/change";
+import { Change } from "@Auth/components/changeProfile";
 import { Withdraw } from "@Auth/components/withdraw";
 import {
 	Card,

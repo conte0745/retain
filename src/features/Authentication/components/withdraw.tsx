@@ -1,40 +1,10 @@
-import { getAuth, signOut } from "firebase/auth";
-import { toastAuth } from "./toastAuth";
-import { Button, useToast } from "@chakra-ui/react";
-import { useState } from "react";
-import { redirect } from "next/navigation";
+"use client";
+
+import { Button } from "@chakra-ui/react";
+import { useWithdraw } from "@Auth/hooks/useWithdraw";
 
 export const Withdraw = () => {
-	const auth = getAuth();
-	const user = auth.currentUser;
-	const toast = useToast();
-
-	const [code, setCode] = useState<string | undefined | null>();
-
-	if (code == "auth/requires-recent-login") {
-		signOut(auth).then(() => {
-			redirect("/signin");
-		});
-	}
-
-	if (!user) {
-		return;
-	}
-
-	const deleteUser = async () => {
-		if (confirm("ユーザを削除します。よろしいですか？")) {
-			const response = await user
-				.delete()
-				.then((response) => {
-					return response;
-				})
-				.catch((error) => {
-					console.error(error);
-					return error;
-				});
-			setCode(toastAuth(toast, response, "withdraw"));
-		}
-	};
+	const { deleteUser } = useWithdraw();
 
 	return (
 		<Button id="withdraw-button" onClick={deleteUser} margin={"2rem"}>

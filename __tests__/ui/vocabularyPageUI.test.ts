@@ -8,12 +8,11 @@ import {
 	getModalItemXpath,
 	getVocabulariesXpath,
 	scrollToBottom,
+	BASE_URL,
+	TIMEOUT,
+	SAMPLE_VOCABULARY,
+	SAMPLE_VOCABULARY_EDIT,
 } from "./util";
-
-const BASE_URL = "http://localhost:3000";
-const TIMEOUT = 100000;
-const SAMPLE_VOCABULARY = "sample test";
-const SAMPLE_VOCABULARY_EDIT = "sample test 123";
 
 describe("Vocabularyページのテスト", () => {
 	let driver: ThenableWebDriver;

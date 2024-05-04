@@ -1,50 +1,26 @@
 "use client";
 
-import { CreateToastFnReturn } from "@chakra-ui/react";
+import { AUTH_CONSTANT } from "@/utils/constant";
 import { FirebaseError } from "firebase/app";
 
-export const toastAuth = (
-	toast: CreateToastFnReturn,
-	response: object,
-	page: string
-) => {
-	if (response instanceof FirebaseError) {
-		toast({
-			title: "Failed",
-			description: getFailedMessage(response),
-			isClosable: true,
-			status: "error",
-		});
-
-		return response.code;
-	} else {
-		toast({
-			title: "Success",
-			description: getSuccessMessage(page),
-			status: "success",
-			isClosable: true,
-		});
-	}
-};
-
-function getSuccessMessage(page: string) {
+export function getSuccessMessage(page: AUTH_CONSTANT) {
 	switch (page) {
-		case "signin":
+		case AUTH_CONSTANT.SIGNIN:
 			return "サインインしました。";
-		case "signup":
+		case AUTH_CONSTANT.SIGNUP:
 			return "サインアップしました。";
-		case "signout":
+		case AUTH_CONSTANT.SIGNOUT:
 			return "サインアウトしました。";
-		case "change":
+		case AUTH_CONSTANT.CHANGE:
 			return "ユーザ情報を更新しました。";
-		case "withdraw":
+		case AUTH_CONSTANT.WITHDRAW:
 			return "退会処理が完了しました。";
 		default:
 			return "OK";
 	}
 }
 
-function getFailedMessage(response: FirebaseError) {
+export function getFailedMessage(response: FirebaseError) {
 	switch (response.code) {
 		case "auth/user-not-found":
 			return "ユーザが見つかりません。";

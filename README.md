@@ -17,6 +17,14 @@
 デフォルトのポート「3000」
 
 ```sh
+yarn start
+```
+
+### アプリケーションの起動（デバッグモード）
+
+デフォルトのポート「3000」
+
+```sh
 yarn dev
 ```
 
@@ -37,6 +45,7 @@ yarn test
 デフォルトのポート「9099」
 
 ```sh
+yarn firebase init # 最初のみ
 yarn emulate
 ```
 

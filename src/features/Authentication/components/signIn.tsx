@@ -7,44 +7,13 @@ import {
 	FormLabel,
 	Heading,
 	Input,
-	useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { AuthUser } from "@/types/AuthUser";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseconfig } from "@/types/AuthUser";
-import { toastAuth } from "./toastAuth";
+import { useSignIn } from "@Auth/hooks/useSignIn";
 
 export const SignIn = () => {
-	const app = initializeApp(firebaseconfig);
-	const auth = getAuth(app);
-	const {
-		handleSubmit,
-		register,
-		formState: { errors, isSubmitting },
-	} = useForm<AuthUser>();
-	const toast = useToast();
+	const { handleSubmit, register, errors, isSubmitting, onSubmit } =
+		useSignIn();
 
-	const onSubmit = async (values: AuthUser) => {
-		if (!values.email && !values.password) {
-			return;
-		}
-
-		const response = await signInWithEmailAndPassword(
-			auth,
-			values.email!,
-			values.password!
-		)
-			.then((response) => {
-				return response;
-			})
-			.catch((response) => {
-				return response;
-			});
-
-		toastAuth(toast, response, "signin");
-	};
 	return (
 		<>
 			<Heading id="signin-heading">サインイン</Heading>
