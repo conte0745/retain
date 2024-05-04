@@ -15,7 +15,7 @@ import { Loading } from "@Vocabulary/components/loading";
 import {
 	ExVocabulary,
 	useVocabularies,
-} from "@/features/Vocabulary/components/VocabularyContext";
+} from "@Vocabulary/components/VocabularyContext";
 
 export const Show: FC<{
 	submitId: number | null;
