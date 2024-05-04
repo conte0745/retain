@@ -10,6 +10,21 @@ import {
 } from "selenium-webdriver";
 import { Options } from "selenium-webdriver/chrome";
 
+/** 共通定数 */
+export const BASE_URL = "http://localhost:3000";
+export const TIMEOUT = 100000;
+
+/** Authenticate定数 */
+export const TEST_EMAIL = "sample@sample.com";
+export const TEST_WEAK_WEAK_PASSWORD = "pass";
+export const TEST_WEAK_PASSWORD = "passWord";
+export const TEST_STRONG_PASSWORD = "paSS&word?q=10";
+export const TEST_DISPLAY_NAME = "con";
+
+/** Vocabulary定数 */
+export const SAMPLE_VOCABULARY = "sample test";
+export const SAMPLE_VOCABULARY_EDIT = "sample test 123";
+
 /**
  * Vocabulary | Modal の 要素 を取得する
  * @param item

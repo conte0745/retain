@@ -8,15 +8,14 @@ import {
 	sendKeysToElement,
 	getElement,
 	navigateAndPrepare,
+	BASE_URL,
+	TIMEOUT,
+	TEST_EMAIL,
+	TEST_WEAK_PASSWORD,
+	TEST_DISPLAY_NAME,
+	TEST_WEAK_WEAK_PASSWORD,
+	TEST_STRONG_PASSWORD,
 } from "./util";
-
-const BASE_URL = "http://localhost:3000";
-const TIMEOUT = 100000;
-const TEST_EMAIL = "sample@sample.com";
-const TEST_WEAK_PASSWORD = "password";
-const TEST_WEAK_WEAK_PASSWORD = "pass";
-const TEST_STRONG_PASSWORD = "paSS&word?q=10";
-const TEST_DISPLAY_NAME = "pon";
 
 describe("認証ページのテスト(サインアップ)", () => {
 	let driver: ThenableWebDriver;

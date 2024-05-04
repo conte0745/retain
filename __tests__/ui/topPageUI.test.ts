@@ -1,8 +1,11 @@
 import { By, logging, ThenableWebDriver, until } from "selenium-webdriver";
-import { displayLogs, getBrowserLogs, setupDriver } from "./util";
-
-const BASE_URL = "http://localhost:3000";
-const TIMEOUT = 100000;
+import {
+	BASE_URL,
+	displayLogs,
+	getBrowserLogs,
+	setupDriver,
+	TIMEOUT,
+} from "./util";
 
 describe("トップページのテスト", () => {
 	let driver: ThenableWebDriver;
