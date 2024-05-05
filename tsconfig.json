@@ -45,7 +45,7 @@
 			}
 		]
 	},
-	"include": ["src", ".next/types/**/*.ts"],
+	"include": ["src", ".next/types/**/*.ts", "./jest.setup.ts"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"

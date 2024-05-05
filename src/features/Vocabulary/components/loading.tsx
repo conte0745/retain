@@ -5,7 +5,7 @@ export const Loading = () => {
 		<Tr>
 			<Td></Td>
 			<Td>
-				<Spinner size={"lg"} />
+				<Spinner size={"lg"}>Loading...</Spinner>
 			</Td>
 			<Td></Td>
 		</Tr>
