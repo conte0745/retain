@@ -5,8 +5,8 @@
 		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
-		"types": ["@testing-library/jest-dom"],
 		"baseUrl": ".",
+		"types": ["@testing-library/jest-dom"],
 		"paths": {
 			"@/*": ["src/*"],
 			"@App/*": ["src/features/App/*"],
@@ -45,11 +45,17 @@
 			}
 		]
 	},
-	"include": ["src", ".next/types/**/*.ts", "./jest.setup.ts"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"types.d.ts",
+		".next/types/**/*.ts"
+	],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
 		}
 	],
-	"exclude": ["node_modules", "**/*.test.tsx", "**/*.test.ts"]
+	"exclude": ["node_modules"]
 }

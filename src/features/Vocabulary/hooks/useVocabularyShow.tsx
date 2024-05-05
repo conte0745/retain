@@ -11,7 +11,7 @@ export const useVocabularyShow = (
 	submitId: number | null,
 	setSubmitId: Dispatch<SetStateAction<number | null>>,
 	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary>>,
-	onOpen: { (): void; (): void }
+	onOpen: { (): void }
 ) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const { vocabularies, setVocabularies } = useVocabularies();
