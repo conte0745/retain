@@ -30,7 +30,7 @@ export async function POST(
 	try {
 		const targetId: number = Number(params.id);
 		await prisma.$connect();
-		await prisma.vocabulary.update({
+		const data = await prisma.vocabulary.update({
 			where: {
 				vocabulary_id: targetId,
 			},
@@ -41,7 +41,7 @@ export async function POST(
 			},
 		});
 
-		return NextResponse.json({ message: "OK" }, { status: 200 });
+		return NextResponse.json({ message: "OK", data: data }, { status: 200 });
 	} catch (e) {
 		console.error(e);
 		return NextResponse.json({ message: "Error" + e }, { status: 500 });

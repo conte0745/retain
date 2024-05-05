@@ -49,6 +49,15 @@ yarn firebase init # 最初のみ
 yarn emulate
 ```
 
+### JSON-SERVER の起動
+
+デフォルトのポート「4555」
+\_\_tests\_\_下の db.json を使用する
+
+```sh
+yarn json-server
+```
+
 ### 環境
 
 ```sh

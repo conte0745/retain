@@ -7,6 +7,9 @@ export async function GET() {
 	try {
 		await prisma.$connect();
 		const vocabularies = await prisma.vocabulary.findMany({
+			where: {
+				deleted_at: null,
+			},
 			orderBy: {
 				vocabulary_id: "asc",
 			},
@@ -30,7 +33,7 @@ export async function POST(request: NextRequest) {
 
 	try {
 		await prisma.$connect();
-		await prisma.vocabulary.create({
+		const data = await prisma.vocabulary.create({
 			data: {
 				title: title,
 				description: null,
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest) {
 				deleted_at: null,
 			},
 		});
-		return NextResponse.json({ message: "OK" }, { status: 200 });
+		return NextResponse.json({ message: "OK", data: data }, { status: 200 });
 	} catch (e) {
 		console.error(e);
 		return NextResponse.json({ message: "Error" }, { status: 500 });

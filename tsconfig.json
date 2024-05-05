@@ -5,16 +5,14 @@
 		"lib": ["ES2020", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
-		"baseUrl": "./",
+		"baseUrl": ".",
+		"types": ["@testing-library/jest-dom"],
 		"paths": {
 			"@/*": ["src/*"],
 			"@App/*": ["src/features/App/*"],
 			"@Auth/*": ["src/features/Authentication/*"],
 			"@Top/*": ["src/features/Top/*"],
 			"@Vocabulary/*": ["src/features/Vocabulary/*"],
-			"@VocabularyShow/*": ["src/features/Vocabulary/Show/*"],
-			"@VocabularyCreate/*": ["src/features/Vocabulary/InputArea/*"],
-			"@VocabularyDetail/*": ["src/features/Vocabulary/Detail/*"],
 			"@Question/*": ["src/features/Question/*"],
 			"@QuestionShow/*": ["src/features/Question/Show/*"],
 			"@QuestionCreate/*": ["src/features/Question/InputArea/*"],
@@ -47,11 +45,17 @@
 			}
 		]
 	},
-	"include": ["src", ".next/types/**/*.ts"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"types.d.ts",
+		".next/types/**/*.ts"
+	],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
 		}
 	],
-	"exclude": ["node_modules", "**/*.test.tsx", "**/*.test.ts"]
+	"exclude": ["node_modules"]
 }

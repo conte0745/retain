@@ -1,11 +1,14 @@
 import { useForm } from "react-hook-form";
-import { Vocabulary } from "@prisma/client";
 import { useVocabularyToast } from "./useVocabularyToast";
 import { STATE, TASK } from "./getMessage";
-import { useVocabularies } from "@Vocabulary/components/VocabularyContext";
+import {
+	ExVocabulary,
+	useVocabularies,
+} from "@Vocabulary/components/VocabularyContext";
+import { getFormattedDate } from "@/types/getFormattedDate";
 
 export const useVocabularyForm = (
-	detailVocabulary: Vocabulary | undefined,
+	detailVocabulary: ExVocabulary | undefined,
 	onClose: () => void | undefined
 ) => {
 	const { showToast } = useVocabularyToast();
@@ -15,7 +18,7 @@ export const useVocabularyForm = (
 		register,
 		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<Vocabulary>({
+	} = useForm<ExVocabulary>({
 		defaultValues: detailVocabulary,
 		reValidateMode: "onSubmit",
 	});
@@ -25,12 +28,12 @@ export const useVocabularyForm = (
 		register: deleteRegister,
 		setValue: setDeleteValue,
 		formState: { errors: deleteErrors, isSubmitting: deleteIsSubmitting },
-	} = useForm<Vocabulary>({
+	} = useForm<ExVocabulary>({
 		defaultValues: detailVocabulary,
 		reValidateMode: "onSubmit",
 	});
 
-	const onAddSubmit = async (values: Vocabulary) => {
+	const onAddSubmit = async (values: ExVocabulary) => {
 		if (!values.title) {
 			return;
 		}
@@ -44,9 +47,15 @@ export const useVocabularyForm = (
 					showToast(TASK.ADD, STATE.SUCCESS);
 					setValue("title", "");
 					setVocabularies((prevItems) => {
-						if (!prevItems) return [values];
-						const newItem = prevItems.concat(values);
-						return newItem;
+						return [
+							...(prevItems || []),
+							{
+								...data.data,
+								created_at: getFormattedDate(data.data.created_at),
+								updated_at: getFormattedDate(data.data.updated_at),
+								isDisplay: true,
+							},
+						];
 					});
 				} else {
 					showToast(TASK.ADD, STATE.FORBIDDEN);
@@ -58,7 +67,7 @@ export const useVocabularyForm = (
 			});
 	};
 
-	const onUpdateSubmit = async (values: Vocabulary) => {
+	const onUpdateSubmit = async (values: ExVocabulary) => {
 		await fetch(`/api/vocabulary/update/${values.vocabulary_id}`, {
 			method: "post",
 			body: JSON.stringify(values),
@@ -72,8 +81,14 @@ export const useVocabularyForm = (
 						const index = prevItems.findIndex(
 							(v) => v.vocabulary_id === values.vocabulary_id
 						);
+						if (index === -1) return prevItems;
 						const updatedItems = [...prevItems];
-						updatedItems[index] = { ...values, updated_at: new Date() };
+						updatedItems[index] = {
+							...data.data,
+							created_at: getFormattedDate(data.data.created_at),
+							updated_at: getFormattedDate(data.data.updated_at),
+							isDisplay: true,
+						};
 						return updatedItems;
 					});
 				} else {
@@ -86,7 +101,7 @@ export const useVocabularyForm = (
 			});
 	};
 
-	const onDeleteSubmit = async (values: Vocabulary) => {
+	const onDeleteSubmit = async (values: ExVocabulary) => {
 		await fetch(`/api/vocabulary/delete/${values.vocabulary_id}`, {
 			method: "post",
 		})
@@ -108,7 +123,7 @@ export const useVocabularyForm = (
 			});
 	};
 
-	const initForm = (detailVocabulary: Vocabulary) => {
+	const initForm = (detailVocabulary: ExVocabulary) => {
 		setValue("vocabulary_id", detailVocabulary?.vocabulary_id);
 		setDeleteValue("vocabulary_id", detailVocabulary?.vocabulary_id);
 		setValue("title", detailVocabulary?.title);
@@ -116,6 +131,7 @@ export const useVocabularyForm = (
 		setValue("updated_at", detailVocabulary?.updated_at);
 		setValue("created_at", detailVocabulary?.created_at);
 		setValue("deleted_at", detailVocabulary?.deleted_at);
+		setValue("isDisplay", true);
 	};
 
 	return {

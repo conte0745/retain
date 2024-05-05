@@ -17,7 +17,7 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import { useVocabularyForm } from "@Vocabulary/hooks/useVocabularyForm";
-import { TIME_ZONE } from "@/utils/constant";
+import { getFormattedDate } from "@/types/getFormattedDate";
 
 interface ModalAreaProps {
 	isOpen: boolean;
@@ -117,16 +117,14 @@ export const ModalArea: FC<ModalAreaProps> = ({
 							<br />
 							<Input type="hidden" {...register("vocabulary_id")} />
 							{detailVocabulary?.created_at && (
-								<Badge>{`作成日：${detailVocabulary?.created_at.toLocaleString(
-									"ja-JP",
-									{ timeZone: TIME_ZONE }
+								<Badge>{`作成日：${getFormattedDate(
+									detailVocabulary.created_at
 								)}`}</Badge>
 							)}
 							<br />
 							{detailVocabulary?.updated_at && (
-								<Badge>{`更新日：${detailVocabulary?.updated_at.toLocaleString(
-									"ja-JP",
-									{ timeZone: TIME_ZONE }
+								<Badge>{`更新日：${getFormattedDate(
+									detailVocabulary.updated_at
 								)}`}</Badge>
 							)}
 						</FormControl>

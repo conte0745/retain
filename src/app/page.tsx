@@ -1,5 +1,6 @@
 "use client";
-import { Top } from "@/features/Top/components";
+
+import { Top } from "@Top/components";
 import React from "react";
 
 const Page = () => {

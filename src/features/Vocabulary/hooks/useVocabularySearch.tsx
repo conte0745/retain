@@ -9,12 +9,15 @@ export const useSearchVocabularies = () => {
 		setSearchValue(event.target.value);
 	};
 
+	// 大文字・小文字を区別しない
 	const onSearch = useCallback(() => {
 		setVocabularies((prevItems) => {
 			if (!prevItems) return null;
 			return prevItems.map((item) => ({
 				...item,
-				isDisplay: searchValue.length === 0 || item.title.includes(searchValue),
+				isDisplay:
+					searchValue.length === 0 ||
+					item.title.toLowerCase().includes(searchValue),
 			}));
 		});
 	}, [searchValue, setVocabularies]);

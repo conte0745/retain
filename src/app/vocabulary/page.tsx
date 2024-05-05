@@ -5,11 +5,11 @@ import { HStack, IconButton, useDisclosure } from "@chakra-ui/react";
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { Vocabulary } from "@prisma/client";
 
-import { Show } from "@/features/Vocabulary/components/showArea";
-import { InputArea } from "@/features/Vocabulary/components/inputArea";
-import { SearchArea } from "@/features/Vocabulary/components/searchArea";
-import { ModalArea } from "@/features/Vocabulary/components/modalArea";
-import { VocabularyProvider } from "@/features/Vocabulary/components/VocabularyContext";
+import { Show } from "@Vocabulary/components/showArea";
+import { InputArea } from "@Vocabulary/components/inputArea";
+import { SearchArea } from "@Vocabulary/components/searchArea";
+import { ModalArea } from "@Vocabulary/components/modalArea";
+import { VocabularyProvider } from "@Vocabulary/components/VocabularyContext";
 import { MODE } from "@/utils/constant";
 
 const Vocabularies = () => {
