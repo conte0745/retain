@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { Show } from "@/features/Vocabulary/components/showArea";
-import { useVocabularyShow } from "@/features/Vocabulary/hooks/useVocabularyShow";
+import { Show } from "@Vocabulary/components/showArea";
+import { useVocabularyShow } from "@Vocabulary/hooks/useVocabularyShow";
 
 jest.mock("@chakra-ui/react", () => ({
 	...jest.requireActual("@chakra-ui/react"),
@@ -20,13 +20,12 @@ jest.mock("@/features/Vocabulary/hooks/useVocabularyShow", () => ({
 	})),
 }));
 
-describe("Show Component", () => {
+describe("Show Component の単体テスト", () => {
 	beforeEach(() => {
-		// モック関数のリセットが必要な場合に備えてここで行います
 		jest.clearAllMocks();
 	});
 
-	test("renders the table with vocabularies", () => {
+	test("一覧表示ができるかのテスト", () => {
 		render(
 			<Show
 				submitId={null}
@@ -39,7 +38,7 @@ describe("Show Component", () => {
 		expect(screen.getByText("Word 2")).toBeInTheDocument();
 	});
 
-	test("renders loading when data is loading", () => {
+	test("読み込み中にLoading画面が表示されるかのテスト", () => {
 		useVocabularyShow.mockReturnValueOnce({
 			vocabularies: [],
 			isLoading: true,
@@ -56,7 +55,7 @@ describe("Show Component", () => {
 		expect(screen.getByText("Loading...")).toBeInTheDocument();
 	});
 
-	test("calls handleEditClick when edit button is clicked", () => {
+	test("編集ボタンが反応するかのテスト", () => {
 		const handleEditClick = jest.fn();
 		useVocabularyShow.mockReturnValue({
 			vocabularies: [{ vocabulary_id: 1, title: "Word 1", isDisplay: true }],
