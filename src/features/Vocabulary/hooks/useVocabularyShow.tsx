@@ -45,7 +45,7 @@ export const useVocabularyShow = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [submitId]);
 
-	const handleEditClick = (vocabulary: Vocabulary) => {
+	const handleEditClick = (vocabulary: ExVocabulary) => {
 		setDetailVocabulary(vocabulary);
 		onOpen();
 	};

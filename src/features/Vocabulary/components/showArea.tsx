@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Loading } from "@Vocabulary/components/loading";
 import { useVocabularyShow } from "@Vocabulary/hooks/useVocabularyShow";
-import { ExVocabulary } from "./VocabularyContext";
+import { ExVocabulary } from "@Vocabulary/components/VocabularyContext";
 
 export const Show: FC<{
 	submitId: number | null;
