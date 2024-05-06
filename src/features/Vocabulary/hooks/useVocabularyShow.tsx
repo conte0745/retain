@@ -6,10 +6,11 @@ import {
 import { Vocabulary } from "@prisma/client";
 import { useVocabularyToast } from "./useVocabularyToast";
 import { STATE, TASK } from "./getMessage";
+import { getFormattedDate } from "@/types/getFormattedDate";
 
 export const useVocabularyShow = (
-	submitId: number | null,
-	setSubmitId: Dispatch<SetStateAction<number | null>>,
+	fetchFlg: boolean,
+	setFetchFlg: Dispatch<SetStateAction<boolean>>,
 	setDetailVocabulary: Dispatch<SetStateAction<Vocabulary>>,
 	onOpen: { (): void }
 ) => {
@@ -18,17 +19,15 @@ export const useVocabularyShow = (
 	const { showToast } = useVocabularyToast();
 
 	useEffect(() => {
-		if (submitId != null) {
+		if (!fetchFlg) {
 			fetch(`/api/vocabulary`)
 				.then((response) => response.json())
 				.then((data) => {
 					setVocabularies(
 						data.map((vocabulary: ExVocabulary) => ({
 							...vocabulary,
-							created_at: new Date(vocabulary.created_at),
-							updated_at: vocabulary.updated_at
-								? new Date(vocabulary.updated_at)
-								: null,
+							created_at: getFormattedDate(vocabulary.created_at),
+							updated_at: getFormattedDate(vocabulary.updated_at),
 							isDisplay: true,
 						}))
 					);
@@ -39,11 +38,11 @@ export const useVocabularyShow = (
 				})
 				.finally(() => {
 					setIsLoading(false);
-					setSubmitId(null);
+					setFetchFlg(true);
 				});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [submitId]);
+	}, [fetchFlg]);
 
 	const handleEditClick = (vocabulary: ExVocabulary) => {
 		setDetailVocabulary(vocabulary);

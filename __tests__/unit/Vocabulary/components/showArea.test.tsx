@@ -28,8 +28,8 @@ describe("Show Component の単体テスト", () => {
 	test("一覧表示ができるかのテスト", () => {
 		render(
 			<Show
-				submitId={null}
-				setSubmitId={jest.fn()}
+				fetchFlg={false}
+				setFetchFlg={jest.fn()}
 				onOpen={jest.fn()}
 				setDetailVocabulary={jest.fn()}
 			/>
@@ -39,15 +39,15 @@ describe("Show Component の単体テスト", () => {
 	});
 
 	test("読み込み中にLoading画面が表示されるかのテスト", () => {
-		useVocabularyShow.mockReturnValueOnce({
+		(useVocabularyShow as jest.Mock).mockReturnValueOnce({
 			vocabularies: [],
 			isLoading: true,
 			handleEditClick: jest.fn(),
 		});
 		render(
 			<Show
-				submitId={null}
-				setSubmitId={jest.fn()}
+				fetchFlg={false}
+				setFetchFlg={jest.fn()}
 				onOpen={jest.fn()}
 				setDetailVocabulary={jest.fn()}
 			/>
@@ -57,7 +57,7 @@ describe("Show Component の単体テスト", () => {
 
 	test("編集ボタンが反応するかのテスト", () => {
 		const handleEditClick = jest.fn();
-		useVocabularyShow.mockReturnValue({
+		(useVocabularyShow as jest.Mock).mockReturnValue({
 			vocabularies: [{ vocabulary_id: 1, title: "Word 1", isDisplay: true }],
 			isLoading: false,
 			handleEditClick,
@@ -65,8 +65,8 @@ describe("Show Component の単体テスト", () => {
 
 		render(
 			<Show
-				submitId={null}
-				setSubmitId={jest.fn()}
+				fetchFlg={true}
+				setFetchFlg={jest.fn()}
 				onOpen={jest.fn()}
 				setDetailVocabulary={jest.fn()}
 			/>

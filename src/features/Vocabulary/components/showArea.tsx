@@ -14,16 +14,16 @@ import { useVocabularyShow } from "@Vocabulary/hooks/useVocabularyShow";
 import { ExVocabulary } from "@Vocabulary/components/VocabularyContext";
 
 export const Show: FC<{
-	submitId: number | null;
-	setSubmitId: Dispatch<SetStateAction<number | null>>;
+	fetchFlg: boolean;
+	setFetchFlg: Dispatch<SetStateAction<boolean>>;
 	onOpen: () => void;
 	setDetailVocabulary: Dispatch<SetStateAction<ExVocabulary>>;
-}> = ({ submitId, setSubmitId, onOpen, setDetailVocabulary }) => {
+}> = ({ fetchFlg, setFetchFlg, onOpen, setDetailVocabulary }) => {
 	const { colorMode } = useColorMode();
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const { vocabularies, isLoading, handleEditClick } = useVocabularyShow(
-		submitId,
-		setSubmitId,
+		fetchFlg,
+		setFetchFlg,
 		setDetailVocabulary,
 		onOpen
 	);
