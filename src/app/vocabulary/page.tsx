@@ -23,7 +23,7 @@ const Vocabularies = () => {
 	};
 
 	const [mode, setMode] = useState<MODE>(MODE.INPUT);
-	const [submitId, setSubmitId] = useState<number | null>(0);
+	const [fetchFlg, setFetchFlg] = useState<boolean>(false);
 	const [detailVocabulary, setDetailVocabulary] =
 		useState<Vocabulary>(initVocabulary);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,8 +54,8 @@ const Vocabularies = () => {
 			</HStack>
 
 			<Show
-				submitId={submitId}
-				setSubmitId={setSubmitId}
+				fetchFlg={fetchFlg}
+				setFetchFlg={setFetchFlg}
 				onOpen={onOpen}
 				setDetailVocabulary={setDetailVocabulary}
 			></Show>

@@ -8,5 +8,17 @@
 			"update_at": "2023-01-01 16:00:00",
 			"deleted_at": "undefined"
 		}
-	]
+	],
+	"api/o": {
+		"vocabularies": [
+			{
+				"vocabulary_id": 1,
+				"title": "Word 1",
+				"description": "description",
+				"created_at": "2023-01-01 16:00:00",
+				"update_at": "2023-01-01 16:00:00",
+				"deleted_at": "undefined"
+			}
+		]
+	}
 }
