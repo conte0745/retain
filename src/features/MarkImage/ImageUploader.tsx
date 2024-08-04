@@ -4,7 +4,12 @@ import { Box, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 interface ImageUploaderProps {
-	onImageUpload: (src: string, width: number, height: number) => void;
+	onImageUpload: (
+		src: string,
+		width: number,
+		height: number,
+		imageName: string
+	) => void;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
@@ -29,7 +34,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
 						const height = img.height;
 						setImageSrc(result);
 						setImageDimensions({ width, height });
-						onImageUpload(result, width, height);
+						onImageUpload(result, width, height, file.name);
 					};
 				}
 			};

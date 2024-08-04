@@ -1,6 +1,7 @@
 import React, { useState, MouseEvent } from "react";
 import Image from "next/image";
 import { Box, Button, ButtonGroup, Heading } from "@chakra-ui/react";
+import domtoimage from "dom-to-image";
 import Marker from "./Marker";
 
 interface Marker {
@@ -13,15 +14,18 @@ interface ImageMarkerProps {
 	imageSrc: string;
 	width: number;
 	height: number;
+	imageName: string;
 	setImageSrc: React.Dispatch<React.SetStateAction<string | null>>;
 }
 const ImageMarker: React.FC<ImageMarkerProps> = ({
 	imageSrc,
 	width,
 	height,
+	imageName,
 	setImageSrc,
 }) => {
 	const [markers, setMarkers] = useState<Marker[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
 		if (imageSrc.length > 0) {
@@ -46,6 +50,16 @@ const ImageMarker: React.FC<ImageMarkerProps> = ({
 	const handleResetClick = () => {
 		setMarkers([]);
 	};
+	const handleDownloadClick = async () => {
+		setIsLoading(true);
+		const markedImage = document.getElementById("marked-image");
+		const image = await domtoimage.toPng(markedImage!);
+		const link = document.createElement("a");
+		link.href = image;
+		link.download = "marked_" + imageName;
+		link.click();
+		setIsLoading(false);
+	};
 	const handleDeleteClick = () => {
 		setMarkers([]);
 		setImageSrc(null);
@@ -56,63 +70,73 @@ const ImageMarker: React.FC<ImageMarkerProps> = ({
 				Preview
 			</Heading>
 			<br />
-			{imageSrc ? (
-				<Image
-					src={imageSrc}
-					alt="Image to mark"
-					onClick={handleImageClick}
-					layout="responsive"
-					width={width}
-					height={height}
-					style={{ cursor: "crosshair", maxWidth: "100%", maxHeight: "100%" }}
-				/>
-			) : (
-				<Box
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						backgroundColor: "lightgray",
-						width: "400px",
-						height: "400px",
-					}}
-				>
-					Please upload image
-				</Box>
-			)}
+			<div id="marked-image">
+				{imageSrc ? (
+					<Image
+						src={imageSrc}
+						alt="Image to mark"
+						onClick={handleImageClick}
+						layout="responsive"
+						width={width}
+						height={height}
+						style={{ cursor: "crosshair", maxWidth: "100%", maxHeight: "100%" }}
+					/>
+				) : (
+					<Box
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							backgroundColor: "lightgray",
+							width: "400px",
+							height: "400px",
+						}}
+					>
+						Please upload image
+					</Box>
+				)}
 
-			{markers.map((marker, index) => (
-				<Marker
-					key={index}
-					x={marker.x}
-					y={marker.y}
-					index={marker.index}
-					onDelete={handleDeleteMarker}
-				/>
-			))}
+				{markers.map((marker, index) => (
+					<Marker
+						key={index}
+						x={marker.x}
+						y={marker.y}
+						index={marker.index}
+						onDelete={handleDeleteMarker}
+					/>
+				))}
+			</div>
 			<br />
 
 			<ButtonGroup>
 				<Button
 					onClick={handleRenumberClick}
 					colorScheme="blue"
-					disabled={!!imageSrc}
+					isDisabled={!imageSrc || markers.length === 0}
 				>
-					RENUMBER
+					Renumber
 				</Button>
 				<Button
 					onClick={handleResetClick}
 					colorScheme="green"
-					disabled={!!imageSrc}
+					isDisabled={!imageSrc || markers.length === 0}
 				>
-					RESET
+					Reset
+				</Button>
+				<Button
+					onClick={handleDownloadClick}
+					colorScheme="pink"
+					isDisabled={!imageSrc || markers.length === 0}
+					isLoading={isLoading}
+				>
+					Download
 				</Button>
 				<Button
 					onClick={handleDeleteClick}
 					colorScheme="red"
-					disabled={!!imageSrc}
+					isDisabled={!imageSrc}
 				>
-					DELETE
+					Delete
 				</Button>
 			</ButtonGroup>
 		</div>
