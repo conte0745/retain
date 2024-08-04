@@ -29,6 +29,7 @@ export const Top = () => {
 		{ head: "Question", path: "/question", labels: ["問題を作成する"] },
 		{ head: "Drill", path: "/drill", labels: ["問題を解く"] },
 		{ head: "Vocabulary", path: "/vocabulary", labels: ["単語帳を作成する"] },
+		{ head: "Mark Image", path: "/markImage", labels: ["画像にマークする"] },
 	];
 	return (
 		<>
