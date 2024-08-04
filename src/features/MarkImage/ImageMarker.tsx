@@ -32,7 +32,6 @@ const ImageMarker: React.FC<ImageMarkerProps> = ({
 			const rect = e.currentTarget.getBoundingClientRect();
 			const x = e.clientX - rect.left;
 			const y = e.clientY - rect.top + e.currentTarget.offsetTop;
-			console.log(y, rect.top);
 			setMarkers([...markers, { x, y, index: markers.length + 1 }]);
 		}
 	};
