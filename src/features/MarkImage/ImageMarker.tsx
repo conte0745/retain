@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, useRef, useEffect } from "react";
+import React, { useState, MouseEvent } from "react";
 import Image from "next/image";
 import { Box, Button, ButtonGroup, Heading } from "@chakra-ui/react";
 import Marker from "./Marker";
@@ -22,17 +22,6 @@ const ImageMarker: React.FC<ImageMarkerProps> = ({
 	setImageSrc,
 }) => {
 	const [markers, setMarkers] = useState<Marker[]>([]);
-	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const imageRef = useRef<HTMLImageElement>(null);
-
-	useEffect(() => {
-		const canvas = canvasRef.current;
-		const image = imageRef.current;
-		if (canvas && image) {
-			canvas.width = image.width;
-			canvas.height = image.height;
-		}
-	}, [imageSrc]); // imageSrc が変更されたときに再計算
 
 	const handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
 		if (imageSrc.length > 0) {
@@ -69,7 +58,6 @@ const ImageMarker: React.FC<ImageMarkerProps> = ({
 			<br />
 			{imageSrc ? (
 				<Image
-					ref={imageRef}
 					src={imageSrc}
 					alt="Image to mark"
 					onClick={handleImageClick}
